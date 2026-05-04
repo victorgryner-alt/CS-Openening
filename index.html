@@ -5,52 +5,146 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CS2 Case Opening</title>
 <style>
-:root{--bg:#0b0f14}
-body{margin:0;background:var(--bg);color:white;font-family:Arial;text-align:center}
-button{padding:10px 14px;border-radius:10px;border:none;background:#2563eb;color:white;cursor:pointer}
-button:disabled{opacity:.5}
-
-header{padding:10px;font-size:22px;font-weight:700}
-
-.topbar{display:flex;justify-content:center;gap:20px;margin:10px}
-.balance{background:#111;padding:8px 14px;border-radius:10px}
-
-.menu{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:10px}
-.casebtn{background:#111;border:1px solid #1f2937}
-.casebtn.active{border:2px solid #3b82f6}
-
-.stage{margin:20px auto;width:720px;background:#020617;border-radius:16px;padding:20px}
-
-/* CASE ANIMATION */
-.caseAnimWrap{height:160px;display:flex;align-items:center;justify-content:center;position:relative}
-.caseImg{
-  width:140px;
-  transition:transform 0.2s;
-}
-.spinning{
-  animation:spin 0.6s linear infinite;
-}
-@keyframes spin{
-  from{transform:rotate(0deg) scale(1.05)}
-  to{transform:rotate(360deg) scale(1.05)}
+:root{
+  --bg:#070a10;
+  --panel:rgba(255,255,255,0.05);
+  --stroke:rgba(255,255,255,0.08);
+  --accent:#3b82f6;
 }
 
-.roller-wrap{display:none;position:relative;overflow:hidden;border-radius:12px}
-.marker{position:absolute;left:50%;top:0;bottom:0;width:3px;background:red;transform:translateX(-50%)}
+body{
+  margin:0;
+  font-family:Arial;
+  background:radial-gradient(circle at top,#111827,#070a10 60%);
+  color:white;
+  text-align:center;
+  overflow-x:hidden;
+}
+
+header{
+  padding:16px;
+  font-size:24px;
+  font-weight:700;
+}
+
+.topbar{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  margin-bottom:10px;
+}
+
+.balance{
+  padding:8px 14px;
+  background:var(--panel);
+  border:1px solid var(--stroke);
+  border-radius:12px;
+}
+
+.menu{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:10px;
+  margin:10px;
+}
+
+.casebtn{
+  background:var(--panel);
+  border:1px solid var(--stroke);
+  padding:10px 12px;
+  border-radius:12px;
+  cursor:pointer;
+  color:white;
+}
+
+.casebtn.active{border:1px solid var(--accent)}
+
+.stage{
+  width:min(900px,95%);
+  margin:20px auto;
+  padding:20px;
+  background:var(--panel);
+  border:1px solid var(--stroke);
+  border-radius:18px;
+}
+
+.roller-wrap{
+  position:relative;
+  overflow:hidden;
+  border-radius:12px;
+  background:#050814;
+}
+
+.marker{
+  position:absolute;
+  left:50%;
+  top:0;
+  bottom:0;
+  width:3px;
+  background:red;
+  transform:translateX(-50%);
+  z-index:5;
+}
+
 .roller{display:flex}
 
-.slot{width:140px;height:140px;margin:5px;background:#111;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.slot img{width:100px;border-radius:6px}
+.slot{
+  min-width:150px;
+  height:150px;
+  margin:6px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--stroke);
+  border-radius:14px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+
+.slot img{width:110px;border-radius:8px}
+
+.common{box-shadow:0 0 10px #60a5fa}
+.rare{box-shadow:0 0 10px #ef4444}
+.epic{box-shadow:0 0 14px #a855f7}
+.legendary{box-shadow:0 0 16px gold}
+.ultra{box-shadow:0 0 18px hotpink}
 
 .inventory{margin-top:20px}
-.item{display:inline-block;margin:6px;padding:6px;border-radius:10px;width:110px}
-.item img{width:90px}
 
-.common{background:#1e3a8a;box-shadow:0 0 10px #60a5fa}
-.rare{background:#7f1d1d;box-shadow:0 0 12px #ef4444}
-.epic{background:#4c1d95;box-shadow:0 0 14px #a855f7}
-.legendary{background:#78350f;box-shadow:0 0 16px gold}
-.ultra{background:#831843;box-shadow:0 0 18px hotpink}
+.item{
+  display:inline-block;
+  margin:6px;
+  padding:8px;
+  border-radius:12px;
+  width:120px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--stroke);
+}
+.item img{width:90px;border-radius:8px}
+
+/* SHAKE */
+@keyframes shake{
+  0%{transform:translate(0,0)}
+  25%{transform:translate(-6px,4px)}
+  50%{transform:translate(6px,-4px)}
+  75%{transform:translate(-4px,2px)}
+  100%{transform:translate(0,0)}
+}
+.shake{animation:shake .4s}
+
+/* CONFETTI */
+.confetti{
+  position:fixed;
+  top:-10px;
+  width:8px;
+  height:8px;
+  background:red;
+  animation:fall 1.5s linear forwards;
+}
+@keyframes fall{
+  to{transform:translateY(110vh) rotate(360deg);opacity:0}
+}
 </style>
 </head>
 <body>
@@ -66,18 +160,10 @@ header{padding:10px;font-size:22px;font-weight:700}
 <button id="openBtn" onclick="openCase()">Åbn Case</button>
 
 <div class="stage">
-
-  <!-- CASE ANIMATION VIEW -->
-  <div id="caseView" class="caseAnimWrap">
-    <img id="caseImg" class="caseImg" src="" alt="case">
-  </div>
-
-  <!-- ROLL VIEW -->
-  <div class="roller-wrap" id="rollerWrap">
+  <div class="roller-wrap">
     <div class="marker"></div>
     <div id="roller" class="roller"></div>
   </div>
-
 </div>
 
 <h2>Inventory</h2>
@@ -92,24 +178,17 @@ let selectedCase="basic";
 const moneyEl=document.getElementById('money');
 const inv=document.getElementById('inv');
 const openBtn=document.getElementById('openBtn');
-const caseImg=document.getElementById('caseImg');
-const caseView=document.getElementById('caseView');
-const rollerWrap=document.getElementById('rollerWrap');
 
 const cases={
-  basic:{name:"Basic Case",cost:10,img:"https://picsum.photos/seed/c1/200",skins:[
-    {name:"Trash",img:"https://picsum.photos/seed/1/100",price:1,rarity:"common",chance:70},
-    {name:"AK",img:"https://picsum.photos/seed/2/100",price:10,rarity:"rare",chance:20},
-    {name:"M4",img:"https://picsum.photos/seed/3/100",price:25,rarity:"epic",chance:10}
+  basic:{name:"Basic Case",cost:10,skins:[
+    {name:"Trash",img:"https://picsum.photos/seed/1/120",price:1,rarity:"common",chance:70},
+    {name:"AK",img:"https://picsum.photos/seed/2/120",price:10,rarity:"rare",chance:20},
+    {name:"M4",img:"https://picsum.photos/seed/3/120",price:25,rarity:"epic",chance:10}
   ]},
-  premium:{name:"Premium Case",cost:25,img:"https://picsum.photos/seed/c2/200",skins:[
-    {name:"AWP",img:"https://picsum.photos/seed/4/100",price:100,rarity:"legendary",chance:20},
-    {name:"Knife",img:"https://picsum.photos/seed/5/100",price:500,rarity:"ultra",chance:5},
-    {name:"M4 Fade",img:"https://picsum.photos/seed/6/100",price:50,rarity:"epic",chance:75}
-  ]},
-  free:{name:"Free Case",cost:0,img:"https://picsum.photos/seed/c3/200",skins:[
-    {name:"Scrap",img:"https://picsum.photos/seed/7/100",price:1,rarity:"common",chance:80},
-    {name:"Blue",img:"https://picsum.photos/seed/8/100",price:3,rarity:"rare",chance:20}
+  premium:{name:"Premium Case",cost:25,skins:[
+    {name:"AWP",img:"https://picsum.photos/seed/4/120",price:100,rarity:"legendary",chance:20},
+    {name:"Knife",img:"https://picsum.photos/seed/5/120",price:500,rarity:"ultra",chance:5},
+    {name:"Fade",img:"https://picsum.photos/seed/6/120",price:50,rarity:"epic",chance:75}
   ]}
 };
 
@@ -122,13 +201,28 @@ function buildMenu(){
     let b=document.createElement('button');
     b.className='casebtn'+(selectedCase===k?' active':'');
     b.innerText=`${c.name} ($${c.cost})`;
-    b.onclick=()=>{selectedCase=k;buildMenu();caseImg.src=c.img;};
+    b.onclick=()=>{selectedCase=k;buildMenu();};
     menu.appendChild(b);
   });
-  caseImg.src=cases[selectedCase].img;
 }
 
-function roll(list){let r=Math.random()*100,s=0;for(let i of list){s+=i.chance;if(r<s)return i;}return list[0];}
+function getWin(list){
+  let r=Math.random()*100,sum=0;
+  for(let s of list){sum+=s.chance;if(r<sum)return s;}
+  return list[0];
+}
+
+function confetti(){
+  for(let i=0;i<40;i++){
+    let d=document.createElement('div');
+    d.className='confetti';
+    d.style.left=Math.random()*100+'vw';
+    d.style.background=['#facc15','#60a5fa','#f472b6','#34d399'][Math.floor(Math.random()*4)];
+    d.style.animationDuration=(1+Math.random())+'s';
+    document.body.appendChild(d);
+    setTimeout(()=>d.remove(),2000);
+  }
+}
 
 function openCase(){
   if(rolling)return;
@@ -142,51 +236,47 @@ function openCase(){
   rolling=true;
   openBtn.disabled=true;
 
-  // SHOW CASE ANIMATION
-  caseView.style.display='flex';
-  rollerWrap.style.display='none';
-  caseImg.classList.add('spinning');
+  const list=c.skins;
+  const winItem=getWin(list);
 
-  setTimeout(()=>{
+  const roller=document.getElementById('roller');
+  roller.innerHTML='';
 
-    // SWITCH TO ROLL
-    caseImg.classList.remove('spinning');
-    caseView.style.display='none';
-    rollerWrap.style.display='block';
+  const winIndex=110;
+  const total=140;
 
-    const list=c.skins;
-    const roller=document.getElementById('roller');
-    roller.innerHTML='';
+  for(let i=0;i<total;i++){
+    let s=(i===winIndex)?winItem:list[Math.floor(Math.random()*list.length)];
+    let div=document.createElement('div');
+    div.className='slot '+s.rarity;
+    div.innerHTML=`<img src='${s.img}'><div>${s.name}</div>`;
+    roller.appendChild(div);
+  }
 
-    for(let i=0;i<120;i++){
-      let s=list[Math.floor(Math.random()*list.length)];
-      let div=document.createElement('div');
-      div.className='slot '+s.rarity;
-      div.innerHTML=`<img src='${s.img}'><div>${s.name}</div>`;
-      roller.appendChild(div);
-    }
+  let pos=0;
+  let speed=45;
 
-    let pos=0;
-    let speed=40;
+  let int=setInterval(()=>{
+    pos-=speed;
+    roller.style.transform=`translateX(${pos}px)`;
+    speed*=0.965;
 
-    let int=setInterval(()=>{
-      pos-=speed;
-      roller.style.transform=`translateX(${pos}px)`;
-      speed*=0.97;
+    if(speed<0.4){
+      clearInterval(int);
 
-      if(speed<0.5){
-        clearInterval(int);
+      inventory.push(winItem);
+      renderInv();
 
-        let win=roll(list);
-        inventory.push(win);
-        renderInv();
-
-        rolling=false;
-        openBtn.disabled=false;
+      if(winItem.rarity==='legendary'){
+        document.body.classList.add('shake');
+        confetti();
+        setTimeout(()=>document.body.classList.remove('shake'),400);
       }
-    },30);
 
-  },1200);
+      rolling=false;
+      openBtn.disabled=false;
+    }
+  },30);
 }
 
 function renderInv(){
@@ -194,7 +284,7 @@ function renderInv(){
   inventory.forEach(s=>{
     let d=document.createElement('div');
     d.className='item '+s.rarity;
-    d.innerHTML=`<img src='${s.img}'><br>${s.name}<br>$${s.price}`;
+    d.innerHTML=`<img src='${s.img}'><div>${s.name}</div><div>$${s.price}</div>`;
     inv.appendChild(d);
   });
 }
