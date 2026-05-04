@@ -1,171 +1,157 @@
 <!DOCTYPE html>
 <html lang="da">
 <head>
-  <meta charset="UTF-8">
-  <title>CS2 Case Opening</title>
-  <style>
-    body {
-      background: #0f0f0f;
-      color: white;
-      font-family: Arial;
-      text-align: center;
-    }
+<meta charset="UTF-8">
+<title>CS2 Case Site</title>
+<style>
+body{background:#0f0f0f;color:white;font-family:Arial;text-align:center}
+button{padding:10px;margin:5px;border-radius:8px;border:none;background:#2563eb;color:white;cursor:pointer}
+input{padding:8px;margin:5px;border-radius:6px;border:none}
 
-    button {
-      padding: 10px 20px;
-      margin: 5px;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
-      background: #2563eb;
-      color: white;
-    }
+#loginBox{margin-top:50px}
 
-    .roller {
-      display: flex;
-      overflow: hidden;
-      width: 320px;
-      margin: 20px auto;
-    }
+.roller{display:flex;overflow:hidden;width:420px;margin:20px auto;position:relative}
+.marker{position:absolute;left:50%;top:0;width:4px;height:100%;background:red;transform:translateX(-50%)}
+.slot{min-width:100px;height:120px;margin:2px;border-radius:10px;background:#1f2937;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:12px}
+.slot img{width:80px}
 
-    .slot {
-      min-width: 100px;
-      height: 120px;
-      margin: 2px;
-      border-radius: 10px;
-      background: #1f2937;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-    }
+.inventory{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.item{width:100px;background:#111;border-radius:10px;padding:5px}
 
-    .slot img {
-      width: 80px;
-    }
-
-    .inventory {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 20px;
-      justify-content: center;
-    }
-
-    .item {
-      width: 100px;
-      background: #111;
-      border-radius: 10px;
-      padding: 5px;
-    }
-
-    .common { background: #60a5fa; }
-    .rare { background: #ef4444; }
-    .epic { background: #a855f7; }
-    .legendary { background: gold; color:black; }
-    .ultra { background: hotpink; }
-  </style>
+.common{background:#60a5fa}
+.rare{background:#ef4444}
+.epic{background:#a855f7}
+.legendary{background:gold;color:black}
+.ultra{background:hotpink}
+</style>
 </head>
 <body>
 
+<div id="loginBox">
+<h2>Login / Register</h2>
+<input id="user" placeholder="Brugernavn">
+<input id="pass" type="password" placeholder="Kode">
+<br>
+<button onclick="register()">Register</button>
+<button onclick="login()">Login</button>
+</div>
+
+<div id="game" style="display:none">
 <h1>CS2 Case Opening</h1>
+<p>Bruger: <span id="username"></span></p>
+<p>Balance: $<span id="money"></span></p>
 
-<p>Balance: $<span id="money">100</span></p>
+<button onclick="openCase('free')">Gratis</button>
+<button onclick="openCase('premium')">Premium ($20)</button>
 
-<button onclick="openCase('free')">Gratis Case</button>
-<button onclick="openCase('paid')">Premium Case ($20)</button>
-
-<div id="roller" class="roller"></div>
+<div class="roller" id="roller"><div class="marker"></div></div>
 
 <h2>Inventory</h2>
 <div id="inventory" class="inventory"></div>
-
-<audio id="openSound" src="https://www.myinstants.com/media/sounds/case.mp3"></audio>
-<audio id="winSound" src="https://www.myinstants.com/media/sounds/tada.mp3"></audio>
+</div>
 
 <script>
-let money = 100;
-let inventory = [];
+let currentUser=null;
+let data={};
 
-const skins = [
-  { name: "Trash Skin", img: "https://via.placeholder.com/80", rarity: "common", chance: 50, price: 1 },
-  { name: "AK Redline", img: "https://via.placeholder.com/80", rarity: "rare", chance: 25, price: 10 },
-  { name: "M4 Hyper Beast", img: "https://via.placeholder.com/80", rarity: "epic", chance: 15, price: 25 },
-  { name: "Dragon Lore", img: "https://via.placeholder.com/80", rarity: "legendary", chance: 9, price: 100 },
-  { name: "Karambit Knife", img: "https://via.placeholder.com/80", rarity: "ultra", chance: 1, price: 500 }
-];
+function saveData(){localStorage.setItem('users',JSON.stringify(data))}
+function loadData(){data=JSON.parse(localStorage.getItem('users')||"{}")}
 
-function updateMoney() {
-  document.getElementById("money").innerText = money;
+function register(){
+  let u=user.value; let p=pass.value;
+  if(data[u]) return alert('Findes allerede');
+  data[u]={pass:p,money:100,inv:[]};
+  saveData(); alert('Oprettet');
 }
 
-function getSkin() {
-  let rand = Math.random() * 100;
-  let sum = 0;
-  for (let s of skins) {
-    sum += s.chance;
-    if (rand < sum) return s;
-  }
+function login(){
+  let u=user.value; let p=pass.value;
+  if(!data[u]||data[u].pass!==p) return alert('Forkert login');
+  currentUser=u;
+  startGame();
 }
 
-function openCase(type) {
-  if (type === 'paid' && money < 20) return alert("Ikke nok penge!");
+function startGame(){
+  loginBox.style.display='none';
+  game.style.display='block';
+  username.innerText=currentUser;
+  updateUI();
+}
 
-  if (type === 'paid') money -= 20;
-  updateMoney();
+function updateUI(){
+  let u=data[currentUser];
+  money.innerText=u.money;
+  inventory.innerHTML='';
+  u.inv.forEach(addToInventory);
+  saveData();
+}
 
-  const roller = document.getElementById("roller");
-  roller.innerHTML = "";
+const cases={
+  free:[
+    {name:'Trash',img:'https://via.placeholder.com/80',rarity:'common',chance:70,price:1},
+    {name:'Blue',img:'https://via.placeholder.com/80',rarity:'rare',chance:25,price:5},
+    {name:'Purple',img:'https://via.placeholder.com/80',rarity:'epic',chance:5,price:20}
+  ],
+  premium:[
+    {name:'AK Redline',img:'https://via.placeholder.com/80',rarity:'rare',chance:40,price:15},
+    {name:'Hyper Beast',img:'https://via.placeholder.com/80',rarity:'epic',chance:35,price:40},
+    {name:'Dragon Lore',img:'https://via.placeholder.com/80',rarity:'legendary',chance:20,price:120},
+    {name:'Knife',img:'https://via.placeholder.com/80',rarity:'ultra',chance:5,price:500}
+  ]
+};
 
-  document.getElementById("openSound").play();
+function rollSkin(list){
+  let r=Math.random()*100,sum=0;
+  for(let s of list){sum+=s.chance;if(r<sum)return s}
+}
 
-  let items = [];
-  for (let i = 0; i < 40; i++) {
-    let s = skins[Math.floor(Math.random() * skins.length)];
+function openCase(type){
+  let user=data[currentUser];
+  if(type==='premium'&&user.money<20) return alert('No money');
+  if(type==='premium') user.money-=20;
+
+  let list=cases[type];
+  let rollerDiv=roller;
+  rollerDiv.innerHTML='<div class="marker"></div>';
+
+  let items=[];
+  for(let i=0;i<50;i++){
+    let s=list[Math.floor(Math.random()*list.length)];
     items.push(`<div class='slot ${s.rarity}'><img src='${s.img}'><div>${s.name}</div></div>`);
   }
-  roller.innerHTML = items.join("");
+  rollerDiv.innerHTML+=items.join('');
 
-  let pos = 0;
-  let speed = 25;
+  let pos=0;
+  let speed=40;
 
-  let interval = setInterval(() => {
-    pos -= speed;
-    roller.style.transform = `translateX(${pos}px)`;
+  let int=setInterval(()=>{
+    pos-=speed;
+    rollerDiv.style.transform=`translateX(${pos}px)`;
+    speed*=0.96;
 
-    speed *= 0.97; // slowdown
-
-    if (speed < 0.5) {
-      clearInterval(interval);
-
-      let win = getSkin();
-      inventory.push(win);
-      addToInventory(win);
-
-      document.getElementById("winSound").play();
+    if(speed<0.3){
+      clearInterval(int);
+      let win=rollSkin(list);
+      user.inv.push(win);
+      updateUI();
     }
-
-  }, 30);
+  },30);
 }
 
-function addToInventory(skin) {
-  const inv = document.getElementById("inventory");
-
-  const div = document.createElement("div");
-  div.className = "item " + skin.rarity;
-  div.innerHTML = `<img src='${skin.img}'><br>${skin.name}<br>$${skin.price}<br><button onclick='sell(this, ${skin.price})'>Sælg</button>`;
-
-  inv.appendChild(div);
+function addToInventory(s){
+  let div=document.createElement('div');
+  div.className='item '+s.rarity;
+  div.innerHTML=`<img src='${s.img}'><br>${s.name}<br>$${s.price}<br><button onclick='sell(this,${s.price})'>Sell</button>`;
+  inventory.appendChild(div);
 }
 
-function sell(btn, price) {
-  money += price;
-  updateMoney();
+function sell(btn,price){
+  data[currentUser].money+=price;
   btn.parentElement.remove();
+  updateUI();
 }
 
-updateMoney();
+loadData();
 </script>
 
 </body>
