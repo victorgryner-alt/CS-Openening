@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <title>CS2 Case Opening</title>
+  <style>
+    body {
+      background: #0f0f0f;
+      color: white;
+      font-family: Arial;
+      text-align: center;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      background: #2563eb;
+      color: white;
+    }
+
+    .roller {
+      display: flex;
+      overflow: hidden;
+      width: 320px;
+      margin: 20px auto;
+    }
+
+    .slot {
+      min-width: 100px;
+      height: 120px;
+      margin: 2px;
+      border-radius: 10px;
+      background: #1f2937;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    .slot img {
+      width: 80px;
+    }
+
+    .inventory {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+      justify-content: center;
+    }
+
+    .item {
+      width: 100px;
+      background: #111;
+      border-radius: 10px;
+      padding: 5px;
+    }
+
+    .common { background: #60a5fa; }
+    .rare { background: #ef4444; }
+    .epic { background: #a855f7; }
+    .legendary { background: gold; color:black; }
+    .ultra { background: hotpink; }
+  </style>
+</head>
+<body>
+
+<h1>CS2 Case Opening</h1>
+
+<p>Balance: $<span id="money">100</span></p>
+
+<button onclick="openCase('free')">Gratis Case</button>
+<button onclick="openCase('paid')">Premium Case ($20)</button>
+
+<div id="roller" class="roller"></div>
+
+<h2>Inventory</h2>
+<div id="inventory" class="inventory"></div>
+
+<audio id="openSound" src="https://www.myinstants.com/media/sounds/case.mp3"></audio>
+<audio id="winSound" src="https://www.myinstants.com/media/sounds/tada.mp3"></audio>
+
+<script>
+let money = 100;
+let inventory = [];
+
+const skins = [
+  { name: "Trash Skin", img: "https://via.placeholder.com/80", rarity: "common", chance: 50, price: 1 },
+  { name: "AK Redline", img: "https://via.placeholder.com/80", rarity: "rare", chance: 25, price: 10 },
+  { name: "M4 Hyper Beast", img: "https://via.placeholder.com/80", rarity: "epic", chance: 15, price: 25 },
+  { name: "Dragon Lore", img: "https://via.placeholder.com/80", rarity: "legendary", chance: 9, price: 100 },
+  { name: "Karambit Knife", img: "https://via.placeholder.com/80", rarity: "ultra", chance: 1, price: 500 }
+];
+
+function updateMoney() {
+  document.getElementById("money").innerText = money;
+}
+
+function getSkin() {
+  let rand = Math.random() * 100;
+  let sum = 0;
+  for (let s of skins) {
+    sum += s.chance;
+    if (rand < sum) return s;
+  }
+}
+
+function openCase(type) {
+  if (type === 'paid' && money < 20) return alert("Ikke nok penge!");
+
+  if (type === 'paid') money -= 20;
+  updateMoney();
+
+  const roller = document.getElementById("roller");
+  roller.innerHTML = "";
+
+  document.getElementById("openSound").play();
+
+  let items = [];
+  for (let i = 0; i < 40; i++) {
+    let s = skins[Math.floor(Math.random() * skins.length)];
+    items.push(`<div class='slot ${s.rarity}'><img src='${s.img}'><div>${s.name}</div></div>`);
+  }
+  roller.innerHTML = items.join("");
+
+  let pos = 0;
+  let speed = 25;
+
+  let interval = setInterval(() => {
+    pos -= speed;
+    roller.style.transform = `translateX(${pos}px)`;
+
+    speed *= 0.97; // slowdown
+
+    if (speed < 0.5) {
+      clearInterval(interval);
+
+      let win = getSkin();
+      inventory.push(win);
+      addToInventory(win);
+
+      document.getElementById("winSound").play();
+    }
+
+  }, 30);
+}
+
+function addToInventory(skin) {
+  const inv = document.getElementById("inventory");
+
+  const div = document.createElement("div");
+  div.className = "item " + skin.rarity;
+  div.innerHTML = `<img src='${skin.img}'><br>${skin.name}<br>$${skin.price}<br><button onclick='sell(this, ${skin.price})'>Sælg</button>`;
+
+  inv.appendChild(div);
+}
+
+function sell(btn, price) {
+  money += price;
+  updateMoney();
+  btn.parentElement.remove();
+}
+
+updateMoney();
+</script>
+
+</body>
+</html>
