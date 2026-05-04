@@ -2,156 +2,108 @@
 <html lang="da">
 <head>
 <meta charset="UTF-8">
-<title>CS2 Case Site</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CS2 Case Opening</title>
 <style>
-body{background:#0f0f0f;color:white;font-family:Arial;text-align:center}
-button{padding:10px;margin:5px;border-radius:8px;border:none;background:#2563eb;color:white;cursor:pointer}
-input{padding:8px;margin:5px;border-radius:6px;border:none}
+:root{--bg:#0b0f14;--card:#121821;--accent:#3b82f6}
+body{margin:0;background:var(--bg);color:#e5e7eb;font-family:Arial;text-align:center}
+button{padding:10px 16px;border-radius:10px;border:none;background:#2563eb;color:white;cursor:pointer}
+button:disabled{opacity:0.5;cursor:not-allowed}
 
-#loginBox{margin-top:50px}
+.stage{margin:30px auto;width:700px;background:#020617;border-radius:16px;padding:20px}
+.roller-wrap{position:relative;overflow:hidden}
+.marker{position:absolute;left:50%;top:0;bottom:0;width:3px;background:red}
+.roller{display:flex}
 
-.roller{display:flex;overflow:hidden;width:420px;margin:20px auto;position:relative}
-.marker{position:absolute;left:50%;top:0;width:4px;height:100%;background:red;transform:translateX(-50%)}
-.slot{min-width:100px;height:120px;margin:2px;border-radius:10px;background:#1f2937;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:12px}
-.slot img{width:80px}
+.slot{width:140px;height:140px;margin:5px;background:#111;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.slot img{width:100px}
 
-.inventory{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
-.item{width:100px;background:#111;border-radius:10px;padding:5px}
-
-.common{background:#60a5fa}
-.rare{background:#ef4444}
-.epic{background:#a855f7}
-.legendary{background:gold;color:black}
-.ultra{background:hotpink}
+.inventory{margin-top:20px}
+.item{display:inline-block;background:#111;margin:5px;padding:5px;border-radius:8px;width:100px}
 </style>
 </head>
 <body>
 
-<div id="loginBox">
-<h2>Login / Register</h2>
-<input id="user" placeholder="Brugernavn">
-<input id="pass" type="password" placeholder="Kode">
-<br>
-<button onclick="register()">Register</button>
-<button onclick="login()">Login</button>
-</div>
-
-<div id="game" style="display:none">
 <h1>CS2 Case Opening</h1>
-<p>Bruger: <span id="username"></span></p>
-<p>Balance: $<span id="money"></span></p>
+<button id="openBtn" onclick="openCase()">Åbn Case</button>
 
-<button onclick="openCase('free')">Gratis</button>
-<button onclick="openCase('premium')">Premium ($20)</button>
-
-<div class="roller" id="roller"><div class="marker"></div></div>
+<div class="stage">
+  <div class="roller-wrap">
+    <div class="marker"></div>
+    <div id="roller" class="roller"></div>
+  </div>
+</div>
 
 <h2>Inventory</h2>
-<div id="inventory" class="inventory"></div>
-</div>
+<div id="inv" class="inventory"></div>
 
 <script>
-let currentUser=null;
-let data={};
+let rolling=false;
+let inventory=[];
 
-function saveData(){localStorage.setItem('users',JSON.stringify(data))}
-function loadData(){data=JSON.parse(localStorage.getItem('users')||"{}")}
+const skins=[
+{name:'Trash',img:'https://picsum.photos/seed/1/100',price:1},
+{name:'AK',img:'https://picsum.photos/seed/2/100',price:10},
+{name:'M4',img:'https://picsum.photos/seed/3/100',price:25},
+{name:'AWP',img:'https://picsum.photos/seed/4/100',price:100},
+{name:'Knife',img:'https://picsum.photos/seed/5/100',price:500}
+];
 
-function register(){
-  let u=user.value; let p=pass.value;
-  if(data[u]) return alert('Findes allerede');
-  data[u]={pass:p,money:100,inv:[]};
-  saveData(); alert('Oprettet');
-}
+function openCase(){
+  if(rolling) return; // prevent spam
+  rolling=true;
+  openBtn.disabled=true;
 
-function login(){
-  let u=user.value; let p=pass.value;
-  if(!data[u]||data[u].pass!==p) return alert('Forkert login');
-  currentUser=u;
-  startGame();
-}
+  const roller=document.getElementById('roller');
+  roller.innerHTML='';
 
-function startGame(){
-  loginBox.style.display='none';
-  game.style.display='block';
-  username.innerText=currentUser;
-  updateUI();
-}
-
-function updateUI(){
-  let u=data[currentUser];
-  money.innerText=u.money;
-  inventory.innerHTML='';
-  u.inv.forEach(addToInventory);
-  saveData();
-}
-
-const cases={
-  free:[
-    {name:'Trash',img:'https://via.placeholder.com/80',rarity:'common',chance:70,price:1},
-    {name:'Blue',img:'https://via.placeholder.com/80',rarity:'rare',chance:25,price:5},
-    {name:'Purple',img:'https://via.placeholder.com/80',rarity:'epic',chance:5,price:20}
-  ],
-  premium:[
-    {name:'AK Redline',img:'https://via.placeholder.com/80',rarity:'rare',chance:40,price:15},
-    {name:'Hyper Beast',img:'https://via.placeholder.com/80',rarity:'epic',chance:35,price:40},
-    {name:'Dragon Lore',img:'https://via.placeholder.com/80',rarity:'legendary',chance:20,price:120},
-    {name:'Knife',img:'https://via.placeholder.com/80',rarity:'ultra',chance:5,price:500}
-  ]
-};
-
-function rollSkin(list){
-  let r=Math.random()*100,sum=0;
-  for(let s of list){sum+=s.chance;if(r<sum)return s}
-}
-
-function openCase(type){
-  let user=data[currentUser];
-  if(type==='premium'&&user.money<20) return alert('No money');
-  if(type==='premium') user.money-=20;
-
-  let list=cases[type];
-  let rollerDiv=roller;
-  rollerDiv.innerHTML='<div class="marker"></div>';
-
-  let items=[];
-  for(let i=0;i<50;i++){
-    let s=list[Math.floor(Math.random()*list.length)];
-    items.push(`<div class='slot ${s.rarity}'><img src='${s.img}'><div>${s.name}</div></div>`);
+  // build long strip
+  for(let i=0;i<120;i++){
+    let s=skins[Math.floor(Math.random()*skins.length)];
+    let div=document.createElement('div');
+    div.className='slot';
+    div.innerHTML=`<img src='${s.img}'><div>${s.name}</div>`;
+    roller.appendChild(div);
   }
-  rollerDiv.innerHTML+=items.join('');
 
   let pos=0;
   let speed=40;
 
   let int=setInterval(()=>{
     pos-=speed;
-    rollerDiv.style.transform=`translateX(${pos}px)`;
-    speed*=0.96;
+    roller.style.transform=`translateX(${pos}px)`;
+    speed*=0.97;
 
-    if(speed<0.3){
+    if(speed<0.5){
       clearInterval(int);
-      let win=rollSkin(list);
-      user.inv.push(win);
-      updateUI();
+
+      // give item AFTER animation
+      let win=skins[Math.floor(Math.random()*skins.length)];
+      inventory.push(win);
+      renderInventory();
+
+      rolling=false;
+      openBtn.disabled=false;
     }
+
   },30);
 }
 
-function addToInventory(s){
-  let div=document.createElement('div');
-  div.className='item '+s.rarity;
-  div.innerHTML=`<img src='${s.img}'><br>${s.name}<br>$${s.price}<br><button onclick='sell(this,${s.price})'>Sell</button>`;
-  inventory.appendChild(div);
+function renderInventory(){
+  inv.innerHTML='';
+  inventory.forEach((s,i)=>{
+    let div=document.createElement('div');
+    div.className='item';
+    div.innerHTML=`<img src='${s.img}' width='80'><br>${s.name}<br>$${s.price}<br>
+    <button onclick='sell(${i})'>Sælg</button>`;
+    inv.appendChild(div);
+  });
 }
 
-function sell(btn,price){
-  data[currentUser].money+=price;
-  btn.parentElement.remove();
-  updateUI();
+function sell(i){
+  inventory.splice(i,1);
+  renderInventory();
 }
-
-loadData();
 </script>
 
 </body>
