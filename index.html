@@ -7,131 +7,199 @@
 <style>
 :root{--bg:#0b0f14}
 body{margin:0;background:var(--bg);color:white;font-family:Arial;text-align:center}
-button{padding:10px 16px;border-radius:10px;border:none;background:#2563eb;color:white;cursor:pointer}
+button{padding:10px 14px;border-radius:10px;border:none;background:#2563eb;color:white;cursor:pointer}
 button:disabled{opacity:.5}
 
-.topbar{display:flex;justify-content:center;gap:20px;margin-top:10px}
-.balance{background:#111;padding:8px 16px;border-radius:10px}
+header{padding:10px;font-size:22px;font-weight:700}
 
-.stage{margin:30px auto;width:700px;background:#020617;border-radius:16px;padding:20px}
-.roller-wrap{position:relative;overflow:hidden}
-.marker{position:absolute;left:50%;top:0;bottom:0;width:3px;background:red}
+.topbar{display:flex;justify-content:center;gap:20px;margin:10px}
+.balance{background:#111;padding:8px 14px;border-radius:10px}
+
+.menu{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:10px}
+.casebtn{background:#111;border:1px solid #1f2937}
+.casebtn.active{border:2px solid #3b82f6}
+
+.stage{margin:20px auto;width:720px;background:#020617;border-radius:16px;padding:20px}
+
+/* CASE ANIMATION */
+.caseAnimWrap{height:160px;display:flex;align-items:center;justify-content:center;position:relative}
+.caseImg{
+  width:140px;
+  transition:transform 0.2s;
+}
+.spinning{
+  animation:spin 0.6s linear infinite;
+}
+@keyframes spin{
+  from{transform:rotate(0deg) scale(1.05)}
+  to{transform:rotate(360deg) scale(1.05)}
+}
+
+.roller-wrap{display:none;position:relative;overflow:hidden;border-radius:12px}
+.marker{position:absolute;left:50%;top:0;bottom:0;width:3px;background:red;transform:translateX(-50%)}
 .roller{display:flex}
 
 .slot{width:140px;height:140px;margin:5px;background:#111;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.slot img{width:100px}
+.slot img{width:100px;border-radius:6px}
 
 .inventory{margin-top:20px}
-.item{display:inline-block;margin:6px;padding:6px;border-radius:10px;width:110px;transition:.2s}
+.item{display:inline-block;margin:6px;padding:6px;border-radius:10px;width:110px}
 .item img{width:90px}
 
 .common{background:#1e3a8a;box-shadow:0 0 10px #60a5fa}
 .rare{background:#7f1d1d;box-shadow:0 0 12px #ef4444}
 .epic{background:#4c1d95;box-shadow:0 0 14px #a855f7}
 .legendary{background:#78350f;box-shadow:0 0 16px gold}
-.ultra{background:#831843;box-shadow:0 0 18px hotpink,0 0 30px hotpink}
-
-.item:hover{transform:scale(1.08)}
+.ultra{background:#831843;box-shadow:0 0 18px hotpink}
 </style>
 </head>
 <body>
 
-<h1>CS2 Case Opening</h1>
+<header>CS2 Case Opening</header>
 
 <div class="topbar">
-  <div class="balance">💰 Balance: $<span id="money">100</span></div>
+  <div class="balance">💰 $<span id="money">100</span></div>
 </div>
 
-<button id="openBtn" onclick="openCase()">Åbn Case ($10)</button>
+<div class="menu" id="menu"></div>
+
+<button id="openBtn" onclick="openCase()">Åbn Case</button>
 
 <div class="stage">
-  <div class="roller-wrap">
+
+  <!-- CASE ANIMATION VIEW -->
+  <div id="caseView" class="caseAnimWrap">
+    <img id="caseImg" class="caseImg" src="" alt="case">
+  </div>
+
+  <!-- ROLL VIEW -->
+  <div class="roller-wrap" id="rollerWrap">
     <div class="marker"></div>
     <div id="roller" class="roller"></div>
   </div>
+
 </div>
 
 <h2>Inventory</h2>
-<div id="inv" class="inventory"></div>
+<div id="inv"></div>
 
 <script>
 let rolling=false;
-let inventory=[];
 let money=100;
+let inventory=[];
+let selectedCase="basic";
 
-const skins=[
-{name:'Trash',img:'https://picsum.photos/seed/1/100',price:1,rarity:'common'},
-{name:'AK',img:'https://picsum.photos/seed/2/100',price:10,rarity:'rare'},
-{name:'M4',img:'https://picsum.photos/seed/3/100',price:25,rarity:'epic'},
-{name:'AWP',img:'https://picsum.photos/seed/4/100',price:100,rarity:'legendary'},
-{name:'Knife',img:'https://picsum.photos/seed/5/100',price:500,rarity:'ultra'}
-];
+const moneyEl=document.getElementById('money');
+const inv=document.getElementById('inv');
+const openBtn=document.getElementById('openBtn');
+const caseImg=document.getElementById('caseImg');
+const caseView=document.getElementById('caseView');
+const rollerWrap=document.getElementById('rollerWrap');
 
-function updateMoney(){
-  document.getElementById('money').innerText=money;
+const cases={
+  basic:{name:"Basic Case",cost:10,img:"https://picsum.photos/seed/c1/200",skins:[
+    {name:"Trash",img:"https://picsum.photos/seed/1/100",price:1,rarity:"common",chance:70},
+    {name:"AK",img:"https://picsum.photos/seed/2/100",price:10,rarity:"rare",chance:20},
+    {name:"M4",img:"https://picsum.photos/seed/3/100",price:25,rarity:"epic",chance:10}
+  ]},
+  premium:{name:"Premium Case",cost:25,img:"https://picsum.photos/seed/c2/200",skins:[
+    {name:"AWP",img:"https://picsum.photos/seed/4/100",price:100,rarity:"legendary",chance:20},
+    {name:"Knife",img:"https://picsum.photos/seed/5/100",price:500,rarity:"ultra",chance:5},
+    {name:"M4 Fade",img:"https://picsum.photos/seed/6/100",price:50,rarity:"epic",chance:75}
+  ]},
+  free:{name:"Free Case",cost:0,img:"https://picsum.photos/seed/c3/200",skins:[
+    {name:"Scrap",img:"https://picsum.photos/seed/7/100",price:1,rarity:"common",chance:80},
+    {name:"Blue",img:"https://picsum.photos/seed/8/100",price:3,rarity:"rare",chance:20}
+  ]}
+};
+
+function updateMoney(){moneyEl.innerText=money;}
+
+function buildMenu(){
+  const menu=document.getElementById('menu');
+  menu.innerHTML='';
+  Object.entries(cases).forEach(([k,c])=>{
+    let b=document.createElement('button');
+    b.className='casebtn'+(selectedCase===k?' active':'');
+    b.innerText=`${c.name} ($${c.cost})`;
+    b.onclick=()=>{selectedCase=k;buildMenu();caseImg.src=c.img;};
+    menu.appendChild(b);
+  });
+  caseImg.src=cases[selectedCase].img;
 }
 
-function openCase(){
-  if(rolling) return;
-  if(money<10) return alert('Ikke nok penge! Sælg skins');
+function roll(list){let r=Math.random()*100,s=0;for(let i of list){s+=i.chance;if(r<s)return i;}return list[0];}
 
-  money-=10;
+function openCase(){
+  if(rolling)return;
+
+  let c=cases[selectedCase];
+  if(money<c.cost){alert("Ikke nok penge");return;}
+
+  money-=c.cost;
   updateMoney();
 
   rolling=true;
   openBtn.disabled=true;
 
-  const roller=document.getElementById('roller');
-  roller.innerHTML='';
+  // SHOW CASE ANIMATION
+  caseView.style.display='flex';
+  rollerWrap.style.display='none';
+  caseImg.classList.add('spinning');
 
-  for(let i=0;i<120;i++){
-    let s=skins[Math.floor(Math.random()*skins.length)];
-    let div=document.createElement('div');
-    div.className='slot '+s.rarity;
-    div.innerHTML=`<img src='${s.img}'><div>${s.name}</div>`;
-    roller.appendChild(div);
-  }
+  setTimeout(()=>{
 
-  let pos=0;
-  let speed=40;
+    // SWITCH TO ROLL
+    caseImg.classList.remove('spinning');
+    caseView.style.display='none';
+    rollerWrap.style.display='block';
 
-  let int=setInterval(()=>{
-    pos-=speed;
-    roller.style.transform=`translateX(${pos}px)`;
-    speed*=0.97;
+    const list=c.skins;
+    const roller=document.getElementById('roller');
+    roller.innerHTML='';
 
-    if(speed<0.5){
-      clearInterval(int);
-
-      let win=skins[Math.floor(Math.random()*skins.length)];
-      inventory.push(win);
-      renderInventory();
-
-      rolling=false;
-      openBtn.disabled=false;
+    for(let i=0;i<120;i++){
+      let s=list[Math.floor(Math.random()*list.length)];
+      let div=document.createElement('div');
+      div.className='slot '+s.rarity;
+      div.innerHTML=`<img src='${s.img}'><div>${s.name}</div>`;
+      roller.appendChild(div);
     }
 
-  },30);
+    let pos=0;
+    let speed=40;
+
+    let int=setInterval(()=>{
+      pos-=speed;
+      roller.style.transform=`translateX(${pos}px)`;
+      speed*=0.97;
+
+      if(speed<0.5){
+        clearInterval(int);
+
+        let win=roll(list);
+        inventory.push(win);
+        renderInv();
+
+        rolling=false;
+        openBtn.disabled=false;
+      }
+    },30);
+
+  },1200);
 }
 
-function renderInventory(){
+function renderInv(){
   inv.innerHTML='';
-  inventory.forEach((s,i)=>{
-    let div=document.createElement('div');
-    div.className='item '+s.rarity;
-    div.innerHTML=`<img src='${s.img}'><br>${s.name}<br>$${s.price}<br>
-    <button onclick='sell(${i})'>Sælg</button>`;
-    inv.appendChild(div);
+  inventory.forEach(s=>{
+    let d=document.createElement('div');
+    d.className='item '+s.rarity;
+    d.innerHTML=`<img src='${s.img}'><br>${s.name}<br>$${s.price}`;
+    inv.appendChild(d);
   });
 }
 
-function sell(i){
-  money+=inventory[i].price;
-  inventory.splice(i,1);
-  updateMoney();
-  renderInventory();
-}
-
+buildMenu();
 updateMoney();
 </script>
 
