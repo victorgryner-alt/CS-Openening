@@ -1,55 +1,644 @@
 <!DOCTYPE html>
 <html lang="da">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nordic Fusion</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>NordicReps | ACBUY Spreadsheet</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Inter',sans-serif;
+background:#0b0f19;
+color:white;
+overflow-x:hidden;
+}
+
+header{
+position:sticky;
+top:0;
+z-index:1000;
+background:rgba(11,15,25,0.92);
+backdrop-filter:blur(12px);
+border-bottom:1px solid rgba(255,255,255,0.06);
+}
+
+.navbar{
+max-width:1400px;
+margin:auto;
+padding:18px 24px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+}
+
+.logo{
+font-size:1.7rem;
+font-weight:800;
+letter-spacing:-1px;
+}
+
+.logo span{
+color:#3b82f6;
+}
+
+.nav-links{
+display:flex;
+gap:24px;
+}
+
+.nav-links a{
+text-decoration:none;
+color:#cbd5e1;
+font-weight:500;
+transition:0.2s;
+}
+
+.nav-links a:hover{
+color:white;
+}
+
+.hero{
+max-width:1400px;
+margin:auto;
+padding:90px 24px 60px;
+}
+
+.hero-box{
+background:linear-gradient(135deg,#121826,#0f172a);
+border:1px solid rgba(255,255,255,0.08);
+border-radius:32px;
+padding:70px;
+position:relative;
+overflow:hidden;
+}
+
+.hero-box::before{
+content:'';
+position:absolute;
+width:500px;
+height:500px;
+background:#2563eb25;
+border-radius:50%;
+top:-250px;
+right:-120px;
+filter:blur(60px);
+}
+
+.hero h1{
+font-size:4.5rem;
+line-height:1;
+font-weight:800;
+max-width:850px;
+position:relative;
+z-index:2;
+}
+
+.hero p{
+margin-top:24px;
+max-width:700px;
+line-height:1.8;
+color:#94a3b8;
+font-size:1.08rem;
+position:relative;
+z-index:2;
+}
+
+.search{
+margin-top:34px;
+display:flex;
+gap:14px;
+max-width:700px;
+position:relative;
+z-index:2;
+}
+
+.search input{
+flex:1;
+padding:18px;
+border:none;
+outline:none;
+background:#1e293b;
+border-radius:16px;
+color:white;
+font-size:1rem;
+}
+
+.search button{
+padding:18px 28px;
+border:none;
+border-radius:16px;
+background:#2563eb;
+color:white;
+font-weight:700;
+cursor:pointer;
+transition:0.2s;
+}
+
+.search button:hover{
+background:#1d4ed8;
+transform:translateY(-2px);
+}
+
+.stats{
+display:flex;
+gap:20px;
+margin-top:42px;
+flex-wrap:wrap;
+position:relative;
+z-index:2;
+}
+
+.stat{
+background:#151c2c;
+padding:20px;
+border-radius:20px;
+border:1px solid rgba(255,255,255,0.06);
+min-width:180px;
+}
+
+.stat h2{
+font-size:2rem;
+color:#60a5fa;
+}
+
+.stat p{
+margin-top:8px;
+color:#94a3b8;
+}
+
+.section{
+max-width:1400px;
+margin:auto;
+padding:20px 24px 80px;
+}
+
+.section-title{
+font-size:2rem;
+font-weight:800;
+margin-bottom:28px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:24px;
+}
+
+.card{
+background:#121826;
+border:1px solid rgba(255,255,255,0.07);
+border-radius:28px;
+overflow:hidden;
+transition:0.25s;
+}
+
+.card:hover{
+transform:translateY(-6px);
+border-color:#2563eb;
+}
+
+.image{
+height:260px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:4rem;
+background:linear-gradient(135deg,#1e293b,#111827);
+}
+
+.content{
+padding:22px;
+}
+
+.content h3{
+font-size:1.25rem;
+margin-bottom:10px;
+}
+
+.price{
+color:#60a5fa;
+font-weight:700;
+margin-bottom:12px;
+}
+
+.content p{
+color:#94a3b8;
+line-height:1.7;
+margin-bottom:20px;
+}
+
+.buttons{
+display:flex;
+gap:12px;
+}
+
+.btn{
+flex:1;
+padding:13px;
+text-align:center;
+border-radius:14px;
+font-weight:700;
+text-decoration:none;
+transition:0.2s;
+}
+
+.primary{
+background:#2563eb;
+color:white;
+}
+
+.secondary{
+background:#1e293b;
+color:white;
+}
+
+.btn:hover{
+transform:translateY(-2px);
+opacity:0.92;
+}
+
+.add-section{
+max-width:1400px;
+margin:auto;
+padding:0 24px 70px;
+}
+
+.add-box{
+background:#121826;
+border-radius:28px;
+padding:32px;
+border:1px solid rgba(255,255,255,0.07);
+}
+
+.add-box h2{
+font-size:1.8rem;
+margin-bottom:16px;
+}
+
+.add-box p{
+color:#94a3b8;
+line-height:1.8;
+}
+
+.code{
+margin-top:24px;
+background:#0b1120;
+padding:22px;
+border-radius:18px;
+overflow:auto;
+color:#60a5fa;
+font-size:0.95rem;
+}
+
+footer{
+margin-top:40px;
+padding:40px 20px;
+text-align:center;
+color:#64748b;
+border-top:1px solid rgba(255,255,255,0.06);
+}
+
+@media(max-width:900px){
+
+.hero h1{
+font-size:3rem;
+}
+
+.hero-box{
+padding:45px 28px;
+}
+
+.nav-links{
+display:none;
+}
+
+.search{
+flex-direction:column;
+}
+
+.search button{
+width:100%;
+}
+
+}
+
+</style>
 </head>
+
 <body>
-    <header>
-        <nav>
-            <div class="logo">Nordic Fusion</div>
-            <ul>
-                <li><a href="#">Forside</a></li>
-                <li><a href="#">Om os</a></li>
-                <li><a href="#">Portfolio</a></li>
-                <li><a href="#">Kontakt</a></li>
-            </ul>
-        </nav>
-        <div class="hero">
-            <h1>Kreativ energi i nordisk stil</h1>
-            <p>Vi skaber events, design og oplevelser med et strejf af innovation og fællesskab.</p>
-            <a href="#" class="cta">Læs mere</a>
-        </div>
-    </header>
 
-    <section class="about">
-        <h2>Hvem er vi?</h2>
-        <p>Nordic Fusion består af et passioneret team, der kombinerer design, kultur og teknologi 
-           for at skabe unikke oplevelser. Vi tror på styrken i samarbejde og kreativitet.</p>
-    </section>
+<header>
 
-    <section class="services">
-        <h2>Vores ydelser</h2>
-        <div class="cards">
-            <div class="card">
-                <h3>Eventplanlægning</h3>
-                <p>Fra idé til virkelighed — vi skaber uforglemmelige oplevelser.</p>
-            </div>
-            <div class="card">
-                <h3>Branding & Design</h3>
-                <p>Visuel identitet, logoer og grafiske materialer med kant.</p>
-            </div>
-            <div class="card">
-                <h3>Digitale løsninger</h3>
-                <p>Webdesign og digitale kampagner, der skaber engagement.</p>
-            </div>
-        </div>
-    </section>
+<div class="navbar">
 
-    <footer>
-        <p>© 2026 Nordic Fusion — Skabt med passion i Danmark.</p>
-    </footer>
+<div class="logo">
+Nordic<span>Reps</span>
+</div>
+
+<div class="nav-links">
+<a href="#">Hjem</a>
+<a href="#">Items</a>
+<a href="#">Kontakt</a>
+</div>
+
+</div>
+
+</header>
+
+<section class="hero">
+
+<div class="hero-box">
+
+<h1>ACBUY Spreadsheet & Finds</h1>
+
+<p>
+Find sneakers, streetwear, designer items og accessories samlet ét sted.
+Perfekt hjemmeside til GitHub Pages med moderne design og hurtig søgning.
+</p>
+
+<div class="search">
+
+<input type="text" id="searchInput" placeholder="Søg efter brand eller item...">
+
+<button onclick="searchItems()">
+Søg
+</button>
+
+</div>
+
+<div class="stats">
+
+<div class="stat">
+<h2>1200+</h2>
+<p>Items</p>
+</div>
+
+<div class="stat">
+<h2>24/7</h2>
+<p>Opdateringer</p>
+</div>
+
+<div class="stat">
+<h2>Fast</h2>
+<p>GitHub Hosting</p>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<h2 class="section-title">
+Populære Finds
+</h2>
+
+<div class="grid" id="itemGrid">
+
+<!-- ITEM -->
+<div class="card">
+
+<div class="image">
+👟
+</div>
+
+<div class="content">
+
+<h3>Nike Dunk</h3>
+
+<div class="price">
+Pris: 240 DKK
+</div>
+
+<p>
+Populær sneaker med QC billeder og gode reviews.
+</p>
+
+<div class="buttons">
+
+<a href="#" class="btn primary">
+ACBUY
+</a>
+
+<a href="#" class="btn secondary">
+QC
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ITEM -->
+<div class="card">
+
+<div class="image">
+🧥
+</div>
+
+<div class="content">
+
+<h3>Trapstar Jacket</h3>
+
+<div class="price">
+Pris: 420 DKK
+</div>
+
+<p>
+Streetwear jacket med flere farver og størrelser.
+</p>
+
+<div class="buttons">
+
+<a href="#" class="btn primary">
+ACBUY
+</a>
+
+<a href="#" class="btn secondary">
+QC
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ITEM -->
+<div class="card">
+
+<div class="image">
+⌚
+</div>
+
+<div class="content">
+
+<h3>Luxury Watch</h3>
+
+<div class="price">
+Pris: 150 DKK
+</div>
+
+<p>
+Accessories og watches med gode seller links.
+</p>
+
+<div class="buttons">
+
+<a href="#" class="btn primary">
+ACBUY
+</a>
+
+<a href="#" class="btn secondary">
+QC
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ITEM -->
+<div class="card">
+
+<div class="image">
+🎒
+</div>
+
+<div class="content">
+
+<h3>Designer Bag</h3>
+
+<div class="price">
+Pris: 310 DKK
+</div>
+
+<p>
+Tasker og backpacks med høj kvalitet og QC links.
+</p>
+
+<div class="buttons">
+
+<a href="#" class="btn primary">
+ACBUY
+</a>
+
+<a href="#" class="btn secondary">
+QC
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="add-section">
+
+<div class="add-box">
+
+<h2>Sådan tilføjer du flere items</h2>
+
+<p>
+Kopiér en hel card-blok og indsæt den inde i "grid" sektionen.
+Skift navn, pris, emoji og links.
+</p>
+
+<div class="code">
+
+&lt;div class="card"&gt;
+
+&lt;div class="image"&gt;👟&lt;/div&gt;
+
+&lt;div class="content"&gt;
+
+&lt;h3&gt;DIT ITEM&lt;/h3&gt;
+
+&lt;div class="price"&gt;
+Pris: 200 DKK
+&lt;/div&gt;
+
+&lt;p&gt;
+Beskrivelse her.
+&lt;/p&gt;
+
+&lt;div class="buttons"&gt;
+
+&lt;a href="#" class="btn primary"&gt;
+ACBUY
+&lt;/a&gt;
+
+&lt;a href="#" class="btn secondary"&gt;
+QC
+&lt;/a&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+
+</div>
+
+</div>
+
+</section>
+
+<footer>
+© 2026 NordicReps — GitHub Pages Ready
+</footer>
+
+<script>
+
+function searchItems(){
+
+const input = document
+.getElementById('searchInput')
+.value
+.toLowerCase();
+
+const cards = document.querySelectorAll('.card');
+
+cards.forEach(card => {
+
+const text = card.innerText.toLowerCase();
+
+if(text.includes(input)){
+
+card.style.display = "block";
+
+}else{
+
+card.style.display = "none";
+
+}
+
+});
+
+}
+
+</script>
+
 </body>
 </html>
