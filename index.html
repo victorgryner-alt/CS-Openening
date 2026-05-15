@@ -1,297 +1,55 @@
 <!DOCTYPE html>
 <html lang="da">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CS2 Case Opening</title>
-<style>
-:root{
-  --bg:#070a10;
-  --panel:rgba(255,255,255,0.05);
-  --stroke:rgba(255,255,255,0.08);
-  --accent:#3b82f6;
-}
-
-body{
-  margin:0;
-  font-family:Arial;
-  background:radial-gradient(circle at top,#111827,#070a10 60%);
-  color:white;
-  text-align:center;
-  overflow-x:hidden;
-}
-
-header{
-  padding:16px;
-  font-size:24px;
-  font-weight:700;
-}
-
-.topbar{
-  display:flex;
-  justify-content:center;
-  gap:12px;
-  margin-bottom:10px;
-}
-
-.balance{
-  padding:8px 14px;
-  background:var(--panel);
-  border:1px solid var(--stroke);
-  border-radius:12px;
-}
-
-.menu{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:10px;
-  margin:10px;
-}
-
-.casebtn{
-  background:var(--panel);
-  border:1px solid var(--stroke);
-  padding:10px 12px;
-  border-radius:12px;
-  cursor:pointer;
-  color:white;
-}
-
-.casebtn.active{border:1px solid var(--accent)}
-
-.stage{
-  width:min(900px,95%);
-  margin:20px auto;
-  padding:20px;
-  background:var(--panel);
-  border:1px solid var(--stroke);
-  border-radius:18px;
-}
-
-.roller-wrap{
-  position:relative;
-  overflow:hidden;
-  border-radius:12px;
-  background:#050814;
-}
-
-.marker{
-  position:absolute;
-  left:50%;
-  top:0;
-  bottom:0;
-  width:3px;
-  background:red;
-  transform:translateX(-50%);
-  z-index:5;
-}
-
-.roller{display:flex}
-
-.slot{
-  min-width:150px;
-  height:150px;
-  margin:6px;
-  background:rgba(255,255,255,0.03);
-  border:1px solid var(--stroke);
-  border-radius:14px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-}
-
-.slot img{width:110px;border-radius:8px}
-
-.common{box-shadow:0 0 10px #60a5fa}
-.rare{box-shadow:0 0 10px #ef4444}
-.epic{box-shadow:0 0 14px #a855f7}
-.legendary{box-shadow:0 0 16px gold}
-.ultra{box-shadow:0 0 18px hotpink}
-
-.inventory{margin-top:20px}
-
-.item{
-  display:inline-block;
-  margin:6px;
-  padding:8px;
-  border-radius:12px;
-  width:120px;
-  background:rgba(255,255,255,0.03);
-  border:1px solid var(--stroke);
-}
-.item img{width:90px;border-radius:8px}
-
-/* SHAKE */
-@keyframes shake{
-  0%{transform:translate(0,0)}
-  25%{transform:translate(-6px,4px)}
-  50%{transform:translate(6px,-4px)}
-  75%{transform:translate(-4px,2px)}
-  100%{transform:translate(0,0)}
-}
-.shake{animation:shake .4s}
-
-/* CONFETTI */
-.confetti{
-  position:fixed;
-  top:-10px;
-  width:8px;
-  height:8px;
-  background:red;
-  animation:fall 1.5s linear forwards;
-}
-@keyframes fall{
-  to{transform:translateY(110vh) rotate(360deg);opacity:0}
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nordic Fusion</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <header>
+        <nav>
+            <div class="logo">Nordic Fusion</div>
+            <ul>
+                <li><a href="#">Forside</a></li>
+                <li><a href="#">Om os</a></li>
+                <li><a href="#">Portfolio</a></li>
+                <li><a href="#">Kontakt</a></li>
+            </ul>
+        </nav>
+        <div class="hero">
+            <h1>Kreativ energi i nordisk stil</h1>
+            <p>Vi skaber events, design og oplevelser med et strejf af innovation og fællesskab.</p>
+            <a href="#" class="cta">Læs mere</a>
+        </div>
+    </header>
 
-<header>CS2 Case Opening</header>
+    <section class="about">
+        <h2>Hvem er vi?</h2>
+        <p>Nordic Fusion består af et passioneret team, der kombinerer design, kultur og teknologi 
+           for at skabe unikke oplevelser. Vi tror på styrken i samarbejde og kreativitet.</p>
+    </section>
 
-<div class="topbar">
-  <div class="balance">💰 $<span id="money">100</span></div>
-</div>
+    <section class="services">
+        <h2>Vores ydelser</h2>
+        <div class="cards">
+            <div class="card">
+                <h3>Eventplanlægning</h3>
+                <p>Fra idé til virkelighed — vi skaber uforglemmelige oplevelser.</p>
+            </div>
+            <div class="card">
+                <h3>Branding & Design</h3>
+                <p>Visuel identitet, logoer og grafiske materialer med kant.</p>
+            </div>
+            <div class="card">
+                <h3>Digitale løsninger</h3>
+                <p>Webdesign og digitale kampagner, der skaber engagement.</p>
+            </div>
+        </div>
+    </section>
 
-<div class="menu" id="menu"></div>
-
-<button id="openBtn" onclick="openCase()">Åbn Case</button>
-
-<div class="stage">
-  <div class="roller-wrap">
-    <div class="marker"></div>
-    <div id="roller" class="roller"></div>
-  </div>
-</div>
-
-<h2>Inventory</h2>
-<div id="inv"></div>
-
-<script>
-let rolling=false;
-let money=100;
-let inventory=[];
-let selectedCase="basic";
-
-const moneyEl=document.getElementById('money');
-const inv=document.getElementById('inv');
-const openBtn=document.getElementById('openBtn');
-
-const cases={
-  basic:{name:"Basic Case",cost:10,skins:[
-    {name:"Trash",img:"https://picsum.photos/seed/1/120",price:1,rarity:"common",chance:70},
-    {name:"AK",img:"https://picsum.photos/seed/2/120",price:10,rarity:"rare",chance:20},
-    {name:"M4",img:"https://picsum.photos/seed/3/120",price:25,rarity:"epic",chance:10}
-  ]},
-  premium:{name:"Premium Case",cost:25,skins:[
-    {name:"AWP",img:"https://picsum.photos/seed/4/120",price:100,rarity:"legendary",chance:20},
-    {name:"Knife",img:"https://picsum.photos/seed/5/120",price:500,rarity:"ultra",chance:5},
-    {name:"Fade",img:"https://picsum.photos/seed/6/120",price:50,rarity:"epic",chance:75}
-  ]}
-};
-
-function updateMoney(){moneyEl.innerText=money;}
-
-function buildMenu(){
-  const menu=document.getElementById('menu');
-  menu.innerHTML='';
-  Object.entries(cases).forEach(([k,c])=>{
-    let b=document.createElement('button');
-    b.className='casebtn'+(selectedCase===k?' active':'');
-    b.innerText=`${c.name} ($${c.cost})`;
-    b.onclick=()=>{selectedCase=k;buildMenu();};
-    menu.appendChild(b);
-  });
-}
-
-function getWin(list){
-  let r=Math.random()*100,sum=0;
-  for(let s of list){sum+=s.chance;if(r<sum)return s;}
-  return list[0];
-}
-
-function confetti(){
-  for(let i=0;i<40;i++){
-    let d=document.createElement('div');
-    d.className='confetti';
-    d.style.left=Math.random()*100+'vw';
-    d.style.background=['#facc15','#60a5fa','#f472b6','#34d399'][Math.floor(Math.random()*4)];
-    d.style.animationDuration=(1+Math.random())+'s';
-    document.body.appendChild(d);
-    setTimeout(()=>d.remove(),2000);
-  }
-}
-
-function openCase(){
-  if(rolling)return;
-
-  let c=cases[selectedCase];
-  if(money<c.cost){alert("Ikke nok penge");return;}
-
-  money-=c.cost;
-  updateMoney();
-
-  rolling=true;
-  openBtn.disabled=true;
-
-  const list=c.skins;
-  const winItem=getWin(list);
-
-  const roller=document.getElementById('roller');
-  roller.innerHTML='';
-
-  const winIndex=110;
-  const total=140;
-
-  for(let i=0;i<total;i++){
-    let s=(i===winIndex)?winItem:list[Math.floor(Math.random()*list.length)];
-    let div=document.createElement('div');
-    div.className='slot '+s.rarity;
-    div.innerHTML=`<img src='${s.img}'><div>${s.name}</div>`;
-    roller.appendChild(div);
-  }
-
-  let pos=0;
-  let speed=45;
-
-  let int=setInterval(()=>{
-    pos-=speed;
-    roller.style.transform=`translateX(${pos}px)`;
-    speed*=0.965;
-
-    if(speed<0.4){
-      clearInterval(int);
-
-      inventory.push(winItem);
-      renderInv();
-
-      if(winItem.rarity==='legendary'){
-        document.body.classList.add('shake');
-        confetti();
-        setTimeout(()=>document.body.classList.remove('shake'),400);
-      }
-
-      rolling=false;
-      openBtn.disabled=false;
-    }
-  },30);
-}
-
-function renderInv(){
-  inv.innerHTML='';
-  inventory.forEach(s=>{
-    let d=document.createElement('div');
-    d.className='item '+s.rarity;
-    d.innerHTML=`<img src='${s.img}'><div>${s.name}</div><div>$${s.price}</div>`;
-    inv.appendChild(d);
-  });
-}
-
-buildMenu();
-updateMoney();
-</script>
-
+    <footer>
+        <p>© 2026 Nordic Fusion — Skabt med passion i Danmark.</p>
+    </footer>
 </body>
 </html>
