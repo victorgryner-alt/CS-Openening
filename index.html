@@ -1,197 +1,1137 @@
-<!-- SNEAKERS -->
-<div class="card">
-
-<div class="image">👟</div>
-
-<div class="content">
-
-<h3>Nike Dunk Low</h3>
-
-<div class="price">
-Pris: 240 DKK
-</div>
-
-<p>
-Populære Nike Dunks med QC billeder og gode seller reviews.
-</p>
-
-<div class="buttons">
-
-<a href="https://www.acbuy.store/" target="_blank" class="btn primary">
-ACBUY
-</a>
-
-<a href="https://acbuy.dev/" target="_blank" class="btn secondary">
-QC
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- HOODIE -->
-<div class="card">
-
-<div class="image">🧥</div>
-
-<div class="content">
-
-<h3>Trapstar Hoodie</h3>
-
-<div class="price">
-Pris: 330 DKK
-</div>
-
-<p>
-Streetwear hoodie med premium kvalitet og flere farver.
-</p>
-
-<div class="buttons">
-
-<a href="https://acbuy-links.com/" target="_blank" class="btn primary">
-ACBUY
-</a>
-
-<a href="https://acbuyco.com/" target="_blank" class="btn secondary">
-QC
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- WATCH -->
-<div class="card">
-
-<div class="image">⌚</div>
-
-<div class="content">
-
-<h3>Luxury Watch</h3>
-
-<div class="price">
-Pris: 180 DKK
-</div>
-
-<p>
-Populære ure med seller links og billeder.
-</p>
-
-<div class="buttons">
-
-<a href="https://www.acbuy.store/" target="_blank" class="btn primary">
-ACBUY
-</a>
-
-<a href="https://acbuy.dev/" target="_blank" class="btn secondary">
-QC
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- BAG -->
-<div class="card">
-
-<div class="image">🎒</div>
-
-<div class="content">
-
-<h3>Designer Backpack</h3>
-
-<div class="price">
-Pris: 290 DKK
-</div>
-
-<p>
-Tasker og backpacks med opdaterede produktlinks.
-</p>
-
-<div class="buttons">
-
-<a href="https://acbuy-links.com/" target="_blank" class="btn primary">
-ACBUY
-</a>
-
-<a href="https://acbuyco.com/" target="_blank" class="btn secondary">
-QC
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- PANTS -->
-<div class="card">
-
-<div class="image">👖</div>
-
-<div class="content">
-
-<h3>Cargo Pants</h3>
-
-<div class="price">
-Pris: 210 DKK
-</div>
-
-<p>
-Budget cargo pants med høj kvalitet og QC billeder.
-</p>
-
-<div class="buttons">
-
-<a href="https://www.acbuy.store/" target="_blank" class="btn primary">
-ACBUY
-</a>
-
-<a href="https://acbuy.dev/" target="_blank" class="btn secondary">
-QC
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- ACCESSORIES -->
-<div class="card">
-
-<div class="image">🕶️</div>
-
-<div class="content">
-
-<h3>Designer Glasses</h3>
-
-<div class="price">
-Pris: 120 DKK
-</div>
-
-<p>
-Accessories og glasses med hurtig shipping og reviews.
-</p>
-
-<div class="buttons">
-
-<a href="https://acbuy-links.com/" target="_blank" class="btn primary">
-ACBUY
-</a>
-
-<a href="https://acbuyco.com/" target="_blank" class="btn secondary">
-QC
-</a>
-
-</div>
-
-</div>
-
-</div>
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Brønderslev Byg & Bolig | Tømrer & Byggeri</title>
+
+  <meta name="description" content="Brønderslev Byg & Bolig – professionelt tømrer- og byggearbejde i Brønderslev og Nordjylland. Renovering, nybyggeri, energioptimering og totalentreprise.">
+
+  <style>
+    :root {
+      --bg: #f5f5f5;
+      --surface: #ffffff;
+      --surface-2: #eeeeee;
+      --text: #111111;
+      --muted: #666666;
+      --border: #dddddd;
+      --accent: #d89b3c;
+      --accent-hover: #bf8125;
+      --nav: rgba(255,255,255,.85);
+      --shadow: 0 20px 60px rgba(0,0,0,.10);
+    }
+
+    body.dark {
+      --bg: #0b0d0f;
+      --surface: #14171a;
+      --surface-2: #1b1f23;
+      --text: #ffffff;
+      --muted: #a5a9ad;
+      --border: #292d31;
+      --accent: #e0a84e;
+      --accent-hover: #f0bb63;
+      --nav: rgba(11,13,15,.82);
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      transition: background .3s ease, color .3s ease;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* NAVIGATION */
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background: var(--nav);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: auto;
+      height: 76px;
+      padding: 0 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -.5px;
+    }
+
+    .logo span {
+      color: var(--accent);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+      transition: .2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .theme-btn,
+    .menu-btn {
+      width: 43px;
+      height: 43px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 18px;
+      transition: .25s;
+    }
+
+    .theme-btn:hover,
+    .menu-btn:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .menu-btn {
+      display: none;
+    }
+
+    /* HERO */
+
+    .hero {
+      min-height: 760px;
+      padding: 170px 25px 100px;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 80% 20%, rgba(216,155,60,.15), transparent 35%),
+        radial-gradient(circle at 10% 80%, rgba(216,155,60,.08), transparent 30%),
+        var(--bg);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      right: -250px;
+      top: 150px;
+      border: 1px solid rgba(216,155,60,.2);
+      border-radius: 50%;
+    }
+
+    .hero-inner {
+      width: 100%;
+      max-width: 1200px;
+      margin: auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 13px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 25px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 12px var(--accent);
+    }
+
+    .hero h1 {
+      max-width: 800px;
+      font-size: clamp(48px, 7vw, 88px);
+      line-height: .98;
+      letter-spacing: -4px;
+      margin-bottom: 28px;
+    }
+
+    .hero h1 span {
+      color: var(--accent);
+    }
+
+    .hero p {
+      max-width: 650px;
+      color: var(--muted);
+      font-size: 19px;
+      line-height: 1.7;
+      margin-bottom: 35px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 15px 23px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 14px;
+      transition: .25s;
+      border: 1px solid var(--border);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #111;
+      border-color: var(--accent);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(216,155,60,.25);
+    }
+
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+    }
+
+    /* STATS */
+
+    .stats {
+      max-width: 1200px;
+      margin: -50px auto 100px;
+      padding: 0 25px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .stat {
+      padding: 32px;
+      border-right: 1px solid var(--border);
+    }
+
+    .stat:last-child {
+      border-right: none;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 34px;
+      margin-bottom: 4px;
+      color: var(--accent);
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* GENERAL */
+
+    .section {
+      max-width: 1200px;
+      margin: auto;
+      padding: 100px 25px;
+    }
+
+    .section-header {
+      max-width: 700px;
+      margin-bottom: 50px;
+    }
+
+    .section-label {
+      color: var(--accent);
+      text-transform: uppercase;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+
+    .section h2 {
+      font-size: clamp(35px, 5vw, 55px);
+      line-height: 1.05;
+      letter-spacing: -2px;
+      margin-bottom: 17px;
+    }
+
+    .section-header p {
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    /* SERVICES */
+
+    .services {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+    }
+
+    .service {
+      padding: 30px;
+      min-height: 220px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: 16px;
+      transition: .3s;
+    }
+
+    .service:hover {
+      transform: translateY(-7px);
+      border-color: var(--accent);
+      box-shadow: var(--shadow);
+    }
+
+    .service-icon {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      background: rgba(216,155,60,.12);
+      color: var(--accent);
+      font-size: 22px;
+      margin-bottom: 25px;
+    }
+
+    .service h3 {
+      font-size: 19px;
+      margin-bottom: 10px;
+    }
+
+    .service p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* ABOUT */
+
+    .about {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 70px;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--muted);
+      margin-bottom: 18px;
+      font-size: 16px;
+    }
+
+    .check-list {
+      list-style: none;
+      margin-top: 30px;
+    }
+
+    .check-list li {
+      margin-bottom: 13px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      font-weight: 600;
+    }
+
+    .check {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(216,155,60,.15);
+      color: var(--accent);
+      border-radius: 50%;
+      font-size: 12px;
+    }
+
+    .about-card {
+      min-height: 400px;
+      border-radius: 22px;
+      padding: 45px;
+      background:
+        linear-gradient(145deg, rgba(216,155,60,.18), transparent),
+        var(--surface-2);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .about-card-number {
+      font-size: 100px;
+      font-weight: 900;
+      line-height: .8;
+      color: var(--accent);
+    }
+
+    .about-card p {
+      margin-top: 20px;
+      color: var(--muted);
+    }
+
+    /* CONTACT */
+
+    .contact-wrapper {
+      display: grid;
+      grid-template-columns: .8fr 1.2fr;
+      gap: 20px;
+    }
+
+    .contact-card,
+    .map-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .contact-card {
+      padding: 40px;
+    }
+
+    .contact-item {
+      display: flex;
+      gap: 17px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .contact-item:last-child {
+      border-bottom: none;
+    }
+
+    .contact-icon {
+      min-width: 45px;
+      height: 45px;
+      border-radius: 11px;
+      background: rgba(216,155,60,.12);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--accent);
+      font-size: 19px;
+    }
+
+    .contact-item small {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 3px;
+    }
+
+    .contact-item a,
+    .contact-item div {
+      font-weight: 700;
+    }
+
+    .contact-item a:hover {
+      color: var(--accent);
+    }
+
+    .map-card {
+      min-height: 430px;
+    }
+
+    .map-card iframe {
+      width: 100%;
+      height: 100%;
+      min-height: 430px;
+      border: 0;
+      filter: grayscale(.8);
+    }
+
+    /* CTA */
+
+    .cta {
+      max-width: 1200px;
+      margin: 0 auto 100px;
+      padding: 0 25px;
+    }
+
+    .cta-inner {
+      padding: 65px;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 90% 20%, rgba(255,255,255,.12), transparent 30%),
+        var(--accent);
+      color: #111;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+    }
+
+    .cta h2 {
+      font-size: clamp(30px, 4vw, 45px);
+      line-height: 1;
+      letter-spacing: -1.5px;
+      margin-bottom: 12px;
+    }
+
+    .cta p {
+      opacity: .7;
+    }
+
+    .cta .btn {
+      background: #111;
+      color: white;
+      border-color: #111;
+      white-space: nowrap;
+    }
+
+    /* FOOTER */
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 45px 25px;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* ANIMATION */
+
+    .fade {
+      animation: fadeUp .8s ease both;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(25px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 900px) {
+
+      .nav-links {
+        position: absolute;
+        top: 76px;
+        left: 15px;
+        right: 15px;
+        padding: 20px;
+        display: none;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 15px;
+        box-shadow: var(--shadow);
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .menu-btn {
+        display: block;
+      }
+
+      .services {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .about-grid,
+      .contact-wrapper {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 600px) {
+
+      .nav-inner {
+        height: 68px;
+      }
+
+      .hero {
+        min-height: 700px;
+        padding-top: 130px;
+      }
+
+      .hero h1 {
+        font-size: 50px;
+        letter-spacing: -2.5px;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+
+      .stats {
+        margin-top: -30px;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stat {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .stat:last-child {
+        border-bottom: none;
+      }
+
+      .services {
+        grid-template-columns: 1fr;
+      }
+
+      .section {
+        padding: 75px 20px;
+      }
+
+      .about-card {
+        min-height: 300px;
+      }
+
+      .about-card-number {
+        font-size: 75px;
+      }
+
+      .contact-card {
+        padding: 25px;
+      }
+
+      .cta {
+        padding: 0 20px;
+      }
+
+      .cta-inner {
+        padding: 40px 30px;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVIGATION -->
+
+  <nav>
+    <div class="nav-inner">
+
+      <a href="#" class="logo">
+        BRØNDERSLEV <span>BYG & BOLIG</span>
+      </a>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#ydelser">Ydelser</a></li>
+        <li><a href="#om-os">Om os</a></li>
+        <li><a href="#kontakt">Kontakt</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="theme-btn" id="themeBtn" aria-label="Skift tema">☀️</button>
+        <button class="menu-btn" id="menuBtn" aria-label="Åbn menu">☰</button>
+      </div>
+
+    </div>
+  </nav>
+
+
+  <!-- HERO -->
+
+  <header class="hero">
+
+    <div class="hero-inner fade">
+
+      <div class="eyebrow">
+        20+ års erfaring
+      </div>
+
+      <h1>
+        Vi bygger med<br>
+        <span>faglighed.</span>
+      </h1>
+
+      <p>
+        Brønderslev Byg & Bolig hjælper med alt fra renovering og
+        energioptimering til nybyggeri og totalentreprise.
+        Vi finder den rigtige løsning til dit projekt.
+      </p>
+
+      <div class="hero-buttons">
+
+        <a href="#kontakt" class="btn btn-primary">
+          Kontakt os →
+        </a>
+
+        <a href="tel:+4551708687" class="btn btn-secondary">
+          ☎ Ring 51 70 86 87
+        </a>
+
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <!-- STATS -->
+
+  <section class="stats">
+
+    <div class="stats-grid">
+
+      <div class="stat">
+        <strong>20+</strong>
+        <span>Års erfaring</span>
+      </div>
+
+      <div class="stat">
+        <strong>360°</strong>
+        <span>Løsninger til byggeprojekter</span>
+      </div>
+
+      <div class="stat">
+        <strong>100%</strong>
+        <span>Fokus på kundens ønsker</span>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- SERVICES -->
+
+  <section class="section" id="ydelser">
+
+    <div class="section-header">
+
+      <div class="section-label">
+        Hvad vi laver
+      </div>
+
+      <h2>
+        Alt indenfor<br>
+        tømrer & snedker
+      </h2>
+
+      <p>
+        Fra små reparationer til komplette byggeprojekter.
+        Vi hjælper dig hele vejen fra idé til færdigt resultat.
+      </p>
+
+    </div>
+
+
+    <div class="services">
+
+      <div class="service">
+        <div class="service-icon">🏠</div>
+        <h3>Renovering</h3>
+        <p>
+          Vi renoverer boliger og bygninger med fokus på kvalitet,
+          funktionalitet og et flot resultat.
+        </p>
+      </div>
+
+      <div class="service">
+        <div class="service-icon">⚡</div>
+        <h3>Energioptimering</h3>
+        <p>
+          Gør din bolig mere energieffektiv og få en løsning,
+          der både giver mening økonomisk og praktisk.
+        </p>
+      </div>
+
+      <div class="service">
+        <div class="service-icon">🏗️</div>
+        <h3>Nybyggeri</h3>
+        <p>
+          Vi hjælper med nye byggeprojekter fra de første idéer
+          til det færdige byggeri.
+        </p>
+      </div>
+
+      <div class="service">
+        <div class="service-icon">🔨</div>
+        <h3>Skadeudbedring</h3>
+        <p>
+          Hurtig og professionel hjælp til skader og reparationer
+          på hus og bygninger.
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ABOUT -->
+
+  <section class="about" id="om-os">
+
+    <div class="section about-grid">
+
+      <div class="about-text">
+
+        <div class="section-label">
+          Brønderslev Byg & Bolig
+        </div>
+
+        <h2>
+          En håndværker<br>
+          du kan regne med.
+        </h2>
+
+        <p>
+          Med mere end 20 års erfaring hjælper vi kunder med
+          byggeprojekter, hvor design, funktionalitet, miljø og
+          økonomi er nøgleordene.
+        </p>
+
+        <p>
+          Vi samarbejder med kompetente underleverandører og
+          egne håndværkere, så du kan få den rigtige løsning
+          til netop dit projekt.
+        </p>
+
+        <ul class="check-list">
+
+          <li>
+            <span class="check">✓</span>
+            Renovering og ombygning
+          </li>
+
+          <li>
+            <span class="check">✓</span>
+            Nybyggeri og totalentreprise
+          </li>
+
+          <li>
+            <span class="check">✓</span>
+            Energioptimering
+          </li>
+
+          <li>
+            <span class="check">✓</span>
+            Tømrer- og snedkerarbejde
+          </li>
+
+        </ul>
+
+      </div>
+
+
+      <div class="about-card">
+
+        <div class="about-card-number">
+          20+
+        </div>
+
+        <p>
+          års erfaring med byggeprojekter i Brønderslev
+          og omegn.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- CONTACT -->
+
+  <section class="section" id="kontakt">
+
+    <div class="section-header">
+
+      <div class="section-label">
+        Kontakt
+      </div>
+
+      <h2>
+        Skal vi hjælpe<br>
+        med dit projekt?
+      </h2>
+
+      <p>
+        Kontakt os for en snak om dit næste byggeprojekt.
+      </p>
+
+    </div>
+
+
+    <div class="contact-wrapper">
+
+      <div class="contact-card">
+
+        <div class="contact-item">
+
+          <div class="contact-icon">📍</div>
+
+          <div>
+            <small>Adresse</small>
+            <div>
+              Hvilshøj Mark 48<br>
+              9700 Brønderslev
+            </div>
+          </div>
+
+        </div>
+
+
+        <div class="contact-item">
+
+          <div class="contact-icon">☎</div>
+
+          <div>
+            <small>Telefon</small>
+            <a href="tel:+4551708687">
+              +45 51 70 86 87
+            </a>
+          </div>
+
+        </div>
+
+
+        <div class="contact-item">
+
+          <div class="contact-icon">✉</div>
+
+          <div>
+            <small>E-mail</small>
+            <a href="mailto:slap@os.dk">
+              slap@os.dk
+            </a>
+          </div>
+
+        </div>
+
+
+        <div class="contact-item">
+
+          <div class="contact-icon">CVR</div>
+
+          <div>
+            <small>CVR-nummer</small>
+            <div>28218826</div>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="map-card">
+
+        <iframe
+          src="https://www.google.com/maps?q=Hvilshøj%20Mark%2048,%209700%20Brønderslev&output=embed"
+          loading="lazy"
+          allowfullscreen>
+        </iframe>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- CTA -->
+
+  <section class="cta">
+
+    <div class="cta-inner">
+
+      <div>
+        <h2>Har du et byggeprojekt?</h2>
+
+        <p>
+          Lad os tage en uforpligtende snak.
+        </p>
+      </div>
+
+      <a href="tel:+4551708687" class="btn">
+        Ring til os →
+      </a>
+
+    </div>
+
+  </section>
+
+
+  <!-- FOOTER -->
+
+  <footer>
+
+    <div class="footer-inner">
+
+      <div>
+        © 2026 Brønderslev Byg & Bolig
+      </div>
+
+      <div>
+        Hvilshøj Mark 48 · 9700 Brønderslev · CVR 28218826
+      </div>
+
+    </div>
+
+  </footer>
+
+
+  <script>
+
+    /* DARK / LIGHT MODE */
+
+    const body = document.body;
+    const themeBtn = document.getElementById("themeBtn");
+
+    const savedTheme = localStorage.getItem("theme");
+
+    if (savedTheme === "light") {
+      body.classList.remove("dark");
+      themeBtn.textContent = "🌙";
+    } else {
+      body.classList.add("dark");
+      themeBtn.textContent = "☀️";
+    }
+
+    themeBtn.addEventListener("click", () => {
+
+      body.classList.toggle("dark");
+
+      const isDark = body.classList.contains("dark");
+
+      themeBtn.textContent = isDark ? "☀️" : "🌙";
+
+      localStorage.setItem(
+        "theme",
+        isDark ? "dark" : "light"
+      );
+
+    });
+
+
+    /* MOBILE MENU */
+
+    const menuBtn = document.getElementById("menuBtn");
+    const navLinks = document.getElementById("navLinks");
+
+    menuBtn.addEventListener("click", () => {
+      navLinks.classList.toggle("active");
+    });
+
+
+    /* CLOSE MOBILE MENU */
+
+    document.querySelectorAll(".nav-links a").forEach(link => {
+
+      link.addEventListener("click", () => {
+        navLinks.classList.remove("active");
+      });
+
+    });
+
+  </script>
+
+</body>
+</html>
