@@ -1,762 +1,821 @@
 <!DOCTYPE html>
 <html lang="da">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BikeCare | Klargøring</title>
 
-    <title>DRIVEFORGE | 3D Car Customizer</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+    body {
+      background: #080b10;
+      color: white;
+      min-height: 100vh;
+    }
 
-        body {
-            overflow: hidden;
-            background: #08090d;
-            color: white;
-            font-family: Arial, Helvetica, sans-serif;
-        }
+    header {
+      padding: 22px 7%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #1c2430;
+      background: rgba(8, 11, 16, 0.95);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
 
-        #canvas {
-            position: fixed;
-            inset: 0;
-            z-index: 1;
-        }
+    .logo {
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
 
-        .logo {
-            position: fixed;
-            top: 25px;
-            left: 30px;
-            z-index: 10;
-        }
+    .logo span {
+      color: #4da3ff;
+    }
 
-        .logo h1 {
-            font-size: 24px;
-            letter-spacing: 4px;
-        }
+    nav a {
+      color: #aaa;
+      text-decoration: none;
+      margin-left: 25px;
+      transition: 0.2s;
+    }
 
-        .logo span {
-            color: #00d9ff;
-        }
+    nav a:hover {
+      color: white;
+    }
 
-        .logo p {
-            margin-top: 5px;
-            color: #8c919c;
-            font-size: 11px;
-            letter-spacing: 2px;
-        }
+    .hero {
+      text-align: center;
+      padding: 90px 20px 65px;
+      background:
+        radial-gradient(circle at top, rgba(50, 130, 255, 0.18), transparent 45%);
+    }
 
-        .stats {
-            position: fixed;
-            top: 25px;
-            right: 30px;
-            z-index: 10;
-            text-align: right;
-        }
+    .hero h1 {
+      font-size: clamp(42px, 7vw, 80px);
+      line-height: 0.95;
+      letter-spacing: -4px;
+      max-width: 900px;
+      margin: auto;
+    }
 
-        .stats p {
-            color: #9096a3;
-            font-size: 12px;
-            margin-bottom: 6px;
-        }
+    .hero h1 span {
+      color: #4da3ff;
+    }
 
-        .stats b {
-            color: #00d9ff;
-        }
+    .hero p {
+      color: #9ba5b3;
+      max-width: 650px;
+      margin: 25px auto;
+      font-size: 18px;
+      line-height: 1.6;
+    }
 
-        .panel {
-            position: fixed;
-            left: 25px;
-            bottom: 25px;
-            width: 330px;
-            max-height: 75vh;
-            overflow-y: auto;
-            z-index: 10;
-            background: rgba(15, 17, 23, 0.88);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 18px;
-            padding: 18px;
-        }
+    .button {
+      display: inline-block;
+      background: #4da3ff;
+      color: white;
+      padding: 14px 24px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: bold;
+    }
 
-        .panel::-webkit-scrollbar {
-            width: 5px;
-        }
+    section {
+      width: min(1100px, 92%);
+      margin: auto;
+      padding: 60px 0;
+    }
 
-        .panel::-webkit-scrollbar-thumb {
-            background: #00d9ff;
-            border-radius: 10px;
-        }
+    .section-title {
+      font-size: 38px;
+      margin-bottom: 10px;
+    }
 
-        .section {
-            margin-bottom: 20px;
-        }
+    .section-description {
+      color: #87909e;
+      margin-bottom: 35px;
+    }
 
-        .section h2 {
-            font-size: 11px;
-            letter-spacing: 2px;
-            color: #818897;
-            margin-bottom: 10px;
-        }
+    .vehicle-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
 
-        .buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
+    .vehicle {
+      background: #10151d;
+      border: 2px solid #1b2430;
+      padding: 28px 20px;
+      border-radius: 18px;
+      cursor: pointer;
+      transition: 0.2s;
+      text-align: center;
+    }
 
-        button {
-            border: 1px solid rgba(255,255,255,0.1);
-            background: #1a1d26;
-            color: white;
-            padding: 10px 12px;
-            border-radius: 9px;
-            cursor: pointer;
-            transition: 0.2s;
-            font-weight: bold;
-        }
+    .vehicle:hover {
+      transform: translateY(-3px);
+      border-color: #3a4d64;
+    }
 
-        button:hover {
-            border-color: #00d9ff;
-            transform: translateY(-2px);
-        }
+    .vehicle.selected {
+      border-color: #4da3ff;
+      background: #101c2a;
+      box-shadow: 0 0 35px rgba(77,163,255,.12);
+    }
 
-        button.active {
-            background: #00d9ff;
-            color: #00151a;
-            border-color: #00d9ff;
-        }
+    .vehicle-icon {
+      font-size: 42px;
+      margin-bottom: 12px;
+    }
 
-        .color {
-            width: 42px;
-            height: 42px;
-            padding: 0;
-            border-radius: 50%;
-        }
+    .vehicle h3 {
+      font-size: 21px;
+    }
 
-        .red { background: #e02020; }
-        .blue { background: #0066ff; }
-        .green { background: #00c76f; }
-        .white { background: #eeeeee; }
-        .black { background: #111111; }
-        .yellow { background: #ffbd00; }
+    .vehicle p {
+      color: #77808d;
+      margin-top: 5px;
+      font-size: 14px;
+    }
 
-        .bottom {
-            position: fixed;
-            bottom: 25px;
-            right: 30px;
-            z-index: 10;
-            display: flex;
-            gap: 10px;
-        }
+    .services {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
 
-        .main-button {
-            background: #00d9ff;
-            color: #001419;
-            border: none;
-            padding: 13px 18px;
-        }
+    .service {
+      display: flex;
+      gap: 15px;
+      background: #10151d;
+      border: 2px solid #1b2430;
+      padding: 22px;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
 
-        .main-button:hover {
-            background: white;
-        }
+    .service:hover {
+      border-color: #344459;
+    }
 
-        .hint {
-            position: fixed;
-            left: 50%;
-            bottom: 30px;
-            transform: translateX(-50%);
-            z-index: 5;
-            color: #747b89;
-            font-size: 12px;
-            letter-spacing: 1px;
-            pointer-events: none;
-        }
+    .service.selected {
+      border-color: #4da3ff;
+      background: #101c2a;
+    }
 
-        @media (max-width: 700px) {
-            .panel {
-                left: 10px;
-                bottom: 10px;
-                width: calc(100% - 20px);
-                max-height: 42vh;
-            }
+    .check {
+      width: 25px;
+      min-width: 25px;
+      height: 25px;
+      border: 2px solid #4b5665;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 3px;
+      font-weight: bold;
+    }
 
-            .logo {
-                top: 15px;
-                left: 15px;
-            }
+    .service.selected .check {
+      background: #4da3ff;
+      border-color: #4da3ff;
+    }
 
-            .stats {
-                display: none;
-            }
+    .service.selected .check::after {
+      content: "✓";
+    }
 
-            .bottom {
-                top: 15px;
-                bottom: auto;
-                right: 15px;
-            }
+    .service-info {
+      flex: 1;
+    }
 
-            .hint {
-                display: none;
-            }
-        }
-    </style>
+    .service-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .service h3 {
+      font-size: 18px;
+    }
+
+    .price {
+      color: #4da3ff;
+      white-space: nowrap;
+      font-weight: 800;
+    }
+
+    .service p {
+      color: #828c99;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-top: 8px;
+    }
+
+    .checkout {
+      display: grid;
+      grid-template-columns: 1.3fr .7fr;
+      gap: 20px;
+    }
+
+    .form,
+    .summary {
+      background: #10151d;
+      border: 1px solid #1c2633;
+      padding: 28px;
+      border-radius: 20px;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 15px;
+      background: #090d13;
+      border: 1px solid #273342;
+      border-radius: 10px;
+      color: white;
+      margin-bottom: 12px;
+      outline: none;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: #4da3ff;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .summary h3 {
+      margin-bottom: 20px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      color: #a0a8b3;
+      margin-bottom: 13px;
+      gap: 15px;
+    }
+
+    .total {
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid #283240;
+      padding-top: 20px;
+      margin-top: 20px;
+      font-size: 25px;
+      font-weight: 900;
+    }
+
+    .total span:last-child {
+      color: #4da3ff;
+    }
+
+    .book-btn {
+      width: 100%;
+      margin-top: 20px;
+      border: none;
+      background: #4da3ff;
+      color: white;
+      padding: 16px;
+      border-radius: 11px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .book-btn:hover {
+      background: #3594f6;
+    }
+
+    .notice {
+      color: #68727f;
+      font-size: 12px;
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+
+    .about {
+      text-align: center;
+      max-width: 750px;
+    }
+
+    .about p {
+      color: #8d97a5;
+      line-height: 1.8;
+    }
+
+    footer {
+      border-top: 1px solid #1b2430;
+      text-align: center;
+      color: #596371;
+      padding: 30px;
+      margin-top: 50px;
+    }
+
+    @media(max-width: 750px) {
+      nav {
+        display: none;
+      }
+
+      .vehicle-grid,
+      .services,
+      .checkout {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 65px;
+      }
+
+      .hero h1 {
+        letter-spacing: -2px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="logo">
-    <h1>DRIVE<span>FORGE</span></h1>
-    <p>BUILD YOUR PERFECT CAR</p>
+<header>
+  <div class="logo">BIKE<span>CARE</span></div>
+
+  <nav>
+    <a href="#bestil">Bestil</a>
+    <a href="#services">Services</a>
+    <a href="#omos">Om os</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <h1>GIV DIN BIKE<br><span>NYT LIV.</span></h1>
+
+  <p>
+    Klargøring og vedligeholdelse af cykler, Talaria og Surron.
+    Vælg din bike og sammensæt selv præcis den klargøring, du ønsker.
+  </p>
+
+  <a href="#bestil" class="button">Sammensæt klargøring →</a>
 </div>
 
-<div class="stats">
-    <p>MODEL: <b>SPORT GT</b></p>
-    <p>GARAGE: <b>01</b></p>
-</div>
+<section id="bestil">
+  <h2 class="section-title">1. Vælg din bike</h2>
+  <p class="section-description">
+    Priserne ændrer sig automatisk alt efter hvilken type du vælger.
+  </p>
 
-<div id="canvas"></div>
+  <div class="vehicle-grid">
 
-<div class="panel">
-
-    <div class="section">
-        <h2>CAR COLOR</h2>
-        <div class="buttons">
-            <button class="color red" onclick="setCarColor('#e02020')"></button>
-            <button class="color blue" onclick="setCarColor('#0066ff')"></button>
-            <button class="color green" onclick="setCarColor('#00c76f')"></button>
-            <button class="color white" onclick="setCarColor('#eeeeee')"></button>
-            <button class="color black" onclick="setCarColor('#111111')"></button>
-            <button class="color yellow" onclick="setCarColor('#ffbd00')"></button>
-        </div>
+    <div class="vehicle" onclick="selectVehicle('cykel', this)">
+      <div class="vehicle-icon">🚲</div>
+      <h3>Cykel</h3>
+      <p>MTB, citybike osv.</p>
     </div>
 
-    <div class="section">
-        <h2>BODY KIT</h2>
-        <div class="buttons">
-            <button class="active" id="stockBtn" onclick="setBodykit('stock')">STOCK</button>
-            <button id="streetBtn" onclick="setBodykit('street')">STREET</button>
-            <button id="raceBtn" onclick="setBodykit('race')">RACE</button>
-        </div>
+    <div class="vehicle" onclick="selectVehicle('talaria', this)">
+      <div class="vehicle-icon">⚡</div>
+      <h3>Talaria</h3>
+      <p>XXX, Sting osv.</p>
     </div>
 
-    <div class="section">
-        <h2>REAR WING</h2>
-        <div class="buttons">
-            <button class="active" id="wingOff" onclick="setWing(false)">NONE</button>
-            <button id="wingOn" onclick="setWing(true)">SPOILER</button>
-        </div>
+    <div class="vehicle" onclick="selectVehicle('surron', this)">
+      <div class="vehicle-icon">🏍️</div>
+      <h3>Surron</h3>
+      <p>Light Bee osv.</p>
     </div>
 
-    <div class="section">
-        <h2>WHEELS</h2>
-        <div class="buttons">
-            <button class="active" onclick="setWheels('normal')">CLASSIC</button>
-            <button onclick="setWheels('sport')">SPORT</button>
-            <button onclick="setWheels('race')">RACING</button>
-        </div>
+  </div>
+</section>
+
+
+<section id="services">
+  <h2 class="section-title">2. Hvad skal vi lave?</h2>
+  <p class="section-description">
+    Du kan vælge lige så mange services, du vil.
+  </p>
+
+  <div class="services" id="serviceList"></div>
+</section>
+
+
+<section>
+  <h2 class="section-title">3. Book klargøring</h2>
+
+  <div class="checkout">
+
+    <div class="form">
+      <input id="name" type="text" placeholder="Dit navn">
+
+      <input id="phone" type="tel" placeholder="Telefonnummer">
+
+      <input id="bikeModel" type="text"
+             placeholder="Model – fx Talaria XXX">
+
+      <textarea id="message"
+                placeholder="Ekstra besked – fx noget bestemt vi skal kigge på"></textarea>
     </div>
 
-    <div class="section">
-        <h2>SUSPENSION</h2>
-        <div class="buttons">
-            <button onclick="setHeight(0.25)">HIGH</button>
-            <button class="active" onclick="setHeight(0)">NORMAL</button>
-            <button onclick="setHeight(-0.22)">LOW</button>
-        </div>
+    <div class="summary">
+
+      <h3>Din bestilling</h3>
+
+      <div id="summaryItems">
+        <p style="color:#66717f;">
+          Vælg din bike og dine services.
+        </p>
+      </div>
+
+      <div class="total">
+        <span>Total</span>
+        <span id="totalPrice">0 kr.</span>
+      </div>
+
+      <button class="book-btn" onclick="book()">
+        Send booking
+      </button>
+
+      <p class="notice">
+        Dette er en bookingforespørgsel. Din tid er først endeligt aftalt,
+        når vi har svaret dig.
+      </p>
+
     </div>
 
-    <div class="section">
-        <h2>UNDERGLOW</h2>
-        <div class="buttons">
-            <button class="active" onclick="setNeon('off')">OFF</button>
-            <button onclick="setNeon('cyan')">CYAN</button>
-            <button onclick="setNeon('red')">RED</button>
-            <button onclick="setNeon('purple')">PURPLE</button>
-        </div>
-    </div>
+  </div>
+</section>
+
+
+<section class="about" id="omos">
+  <h2 class="section-title">Om os</h2>
+
+  <p>
+    Vi er to venner med interesse for cykler, Talaria og Surron.
+    Vi tilbyder klargøring og almindelig vedligeholdelse til fair priser,
+    så din bike kan stå clean og klar til næste tur.
+    <br><br>
+    Vi fokuserer på grundigt arbejde og god service frem for dyre
+    værkstedspriser.
+  </p>
+</section>
+
+
+<footer>
+  © 2026 BikeCare · Cykel · Talaria · Surron
+</footer>
+
+
+<script>
+
+const services = [
+  {
+    id: "wash",
+    name: "🧼 Grundig vask",
+    description:
+      "Grundig udvendig vask af stel, hjul og svært tilgængelige områder.",
+    cykel: 99,
+    talaria: 149,
+    surron: 149
+  },
+
+  {
+    id: "premium",
+    name: "✨ Premium klargøring",
+    description:
+      "Grundig vask, rengøring af fælge og kædeområde samt flot finish.",
+    cykel: 199,
+    talaria: 299,
+    surron: 299
+  },
+
+  {
+    id: "tires",
+    name: "🛞 Dæktryk + sikkerhedstjek",
+    description:
+      "Vi kontrollerer dæktryk, dæk, bremser og tydelige løse dele.",
+    cykel: 49,
+    talaria: 69,
+    surron: 69
+  },
+
+  {
+    id: "brakes",
+    name: "🔧 Bremsejustering",
+    description:
+      "Kontrol og justering af bremser samt kontrol af synligt slid på klodser.",
+    cykel: 79,
+    talaria: 99,
+    surron: 99
+  },
+
+  {
+    id: "chain",
+    name: "⛓️ Kæderens + smøring",
+    description:
+      "Kæden renses for snavs og gammel smøring og smøres efterfølgende.",
+    cykel: 79,
+    talaria: 119,
+    surron: 119
+  },
+
+  {
+    id: "bolts",
+    name: "🔩 Efterspænding",
+    description:
+      "Kontrol af relevante bolte og fastgørelser samt efterspænding.",
+    cykel: 79,
+    talaria: 99,
+    surron: 99
+  },
+
+  {
+    id: "wheels",
+    name: "🧽 Fælge + drivetrain-rens",
+    description:
+      "Ekstra grundig rengøring omkring fælge, kæde og drivetrain.",
+    cykel: 99,
+    talaria: 149,
+    surron: 149
+  },
+
+  {
+    id: "full",
+    name: "⭐ Fuld klargøring",
+    description:
+      "Vask, kæderens, smøring, dæktryk, bremsetjek, efterspænding og finish.",
+    cykel: 299,
+    talaria: 449,
+    surron: 449
+  }
+];
 
-</div>
 
-<div class="bottom">
-    <button onclick="resetCar()">RESET</button>
-    <button class="main-button" onclick="saveCar()">SAVE BUILD</button>
-</div>
+let selectedVehicle = null;
 
-<div class="hint">DRAG TO ROTATE • SCROLL TO ZOOM</div>
+let selectedServices = [];
 
 
-<script type="module">
+function selectVehicle(vehicle, element) {
 
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
-import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+  selectedVehicle = vehicle;
 
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x08090d);
-scene.fog = new THREE.Fog(0x08090d, 10, 45);
+  document.querySelectorAll(".vehicle").forEach(v => {
+    v.classList.remove("selected");
+  });
 
-const camera = new THREE.PerspectiveCamera(
-    45,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-);
+  element.classList.add("selected");
 
-camera.position.set(7, 4.5, 8);
+  selectedServices = [];
 
-const renderer = new THREE.WebGLRenderer({
-    antialias: true,
-    alpha: true
-});
+  renderServices();
 
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-renderer.shadowMap.enabled = true;
-
-document.getElementById("canvas").appendChild(renderer.domElement);
-
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.dampingFactor = 0.06;
-controls.target.set(0, 1, 0);
-controls.minDistance = 5;
-controls.maxDistance = 18;
-
-
-/* LIGHTS */
-
-const ambient = new THREE.HemisphereLight(
-    0xffffff,
-    0x111122,
-    2
-);
-
-scene.add(ambient);
-
-const keyLight = new THREE.DirectionalLight(0xffffff, 4);
-keyLight.position.set(5, 8, 5);
-keyLight.castShadow = true;
-scene.add(keyLight);
-
-const blueLight = new THREE.PointLight(0x00d9ff, 20, 20);
-blueLight.position.set(-5, 3, 3);
-scene.add(blueLight);
-
-const redLight = new THREE.PointLight(0xff004c, 15, 15);
-redLight.position.set(5, 2, -5);
-scene.add(redLight);
-
-
-/* FLOOR */
-
-const floorGeometry = new THREE.PlaneGeometry(100, 100);
-
-const floorMaterial = new THREE.MeshStandardMaterial({
-    color: 0x101218,
-    metalness: 0.8,
-    roughness: 0.25
-});
-
-const floor = new THREE.Mesh(floorGeometry, floorMaterial);
-
-floor.rotation.x = -Math.PI / 2;
-floor.receiveShadow = true;
-
-scene.add(floor);
-
-
-/* CAR */
-
-const car = new THREE.Group();
-scene.add(car);
-
-const carMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0x0066ff,
-    metalness: 0.7,
-    roughness: 0.22,
-    clearcoat: 1,
-    clearcoatRoughness: 0.1
-});
-
-const darkMaterial = new THREE.MeshStandardMaterial({
-    color: 0x090909,
-    metalness: 0.7,
-    roughness: 0.25
-});
-
-const glassMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0x101820,
-    metalness: 0.3,
-    roughness: 0.05,
-    transparent: true,
-    opacity: 0.7
-});
-
-
-/* MAIN BODY */
-
-const body = new THREE.Mesh(
-    new THREE.BoxGeometry(4.8, 0.85, 2),
-    carMaterial
-);
-
-body.position.y = 1.05;
-body.castShadow = true;
-car.add(body);
-
-
-/* HOOD SHAPE */
-
-const hood = new THREE.Mesh(
-    new THREE.BoxGeometry(2, 0.35, 1.85),
-    carMaterial
-);
-
-hood.position.set(1.25, 1.55, 0);
-hood.rotation.z = -0.05;
-car.add(hood);
-
-
-/* CABIN */
-
-const cabin = new THREE.Mesh(
-    new THREE.BoxGeometry(2.25, 0.9, 1.7),
-    glassMaterial
-);
-
-cabin.position.set(-0.45, 1.85, 0);
-cabin.rotation.z = -0.05;
-car.add(cabin);
-
-
-/* FRONT BUMPER */
-
-const frontBumper = new THREE.Mesh(
-    new THREE.BoxGeometry(0.5, 0.5, 2.05),
-    carMaterial
-);
-
-frontBumper.position.set(2.55, 0.85, 0);
-car.add(frontBumper);
-
-
-/* REAR BUMPER */
-
-const rearBumper = new THREE.Mesh(
-    new THREE.BoxGeometry(0.5, 0.5, 2.05),
-    carMaterial
-);
-
-rearBumper.position.set(-2.55, 0.85, 0);
-car.add(rearBumper);
-
-
-/* WHEELS */
-
-const wheels = [];
-
-function createWheel(x, z) {
-
-    const wheelGroup = new THREE.Group();
-
-    const tire = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.52, 0.52, 0.32, 32),
-        darkMaterial
-    );
-
-    tire.rotation.x = Math.PI / 2;
-    tire.castShadow = true;
-
-    wheelGroup.add(tire);
-
-    const rimMaterial = new THREE.MeshStandardMaterial({
-        color: 0xaaaaaa,
-        metalness: 1,
-        roughness: 0.2
-    });
-
-    const rim = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.32, 0.32, 0.34, 16),
-        rimMaterial
-    );
-
-    rim.rotation.x = Math.PI / 2;
-    wheelGroup.add(rim);
-
-    wheelGroup.position.set(x, 0.55, z);
-
-    car.add(wheelGroup);
-    wheels.push({ group: wheelGroup, rim });
-
+  updateSummary();
 }
 
-createWheel(1.55, 1.05);
-createWheel(1.55, -1.05);
-createWheel(-1.55, 1.05);
-createWheel(-1.55, -1.05);
 
+function renderServices() {
 
-/* SPOILER */
+  const container = document.getElementById("serviceList");
 
-const spoiler = new THREE.Group();
+  container.innerHTML = "";
 
-const spoilerMaterial = new THREE.MeshStandardMaterial({
-    color: 0x111111,
-    metalness: 0.8,
-    roughness: 0.2
-});
+  if (!selectedVehicle) {
 
-const wing = new THREE.Mesh(
-    new THREE.BoxGeometry(1.8, 0.18, 0.4),
-    spoilerMaterial
-);
+    container.innerHTML = `
+      <p style="color:#66717f;">
+        Vælg først hvilken bike du har 👆
+      </p>
+    `;
 
-wing.position.y = 0.75;
+    return;
+  }
 
-const stand1 = new THREE.Mesh(
-    new THREE.BoxGeometry(0.12, 0.7, 0.12),
-    spoilerMaterial
-);
 
-stand1.position.set(-0.55, 0.35, 0);
+  services.forEach(service => {
 
-const stand2 = stand1.clone();
-stand2.position.x = 0.55;
+    const card = document.createElement("div");
 
-spoiler.add(wing, stand1, stand2);
+    card.className = "service";
 
-spoiler.position.set(-2.1, 1.35, 0);
-spoiler.visible = false;
+    card.onclick = () => toggleService(service.id, card);
 
-car.add(spoiler);
+    card.innerHTML = `
+      <div class="check"></div>
 
+      <div class="service-info">
 
-/* BODYKIT */
+        <div class="service-top">
 
-const streetKit = new THREE.Group();
+          <h3>${service.name}</h3>
 
-const side1 = new THREE.Mesh(
-    new THREE.BoxGeometry(3.8, 0.18, 0.2),
-    spoilerMaterial
-);
+          <div class="price">
+            ${service[selectedVehicle]} kr.
+          </div>
 
-side1.position.set(0, 0.55, 1.08);
+        </div>
 
-const side2 = side1.clone();
-side2.position.z = -1.08;
+        <p>${service.description}</p>
 
-streetKit.add(side1, side2);
-streetKit.visible = false;
+      </div>
+    `;
 
-car.add(streetKit);
+    container.appendChild(card);
 
-
-const raceKit = new THREE.Group();
-
-const splitter = new THREE.Mesh(
-    new THREE.BoxGeometry(1.2, 0.1, 2.4),
-    spoilerMaterial
-);
-
-splitter.position.set(2.75, 0.52, 0);
-
-const diffuser = new THREE.Mesh(
-    new THREE.BoxGeometry(0.9, 0.12, 2.3),
-    spoilerMaterial
-);
-
-diffuser.position.set(-2.75, 0.55, 0);
-
-raceKit.add(splitter, diffuser);
-raceKit.visible = false;
-
-car.add(raceKit);
-
-
-/* NEON */
-
-const neon = new THREE.PointLight(0x00d9ff, 0, 7);
-
-neon.position.set(0, 0.25, 0);
-car.add(neon);
-
-
-/* FUNCTIONS */
-
-window.setCarColor = function(color) {
-    carMaterial.color.set(color);
-};
-
-window.setWing = function(show) {
-    spoiler.visible = show;
-
-    document.getElementById("wingOff").classList.toggle("active", !show);
-    document.getElementById("wingOn").classList.toggle("active", show);
-};
-
-window.setBodykit = function(type) {
-
-    streetKit.visible = false;
-    raceKit.visible = false;
-
-    document.getElementById("stockBtn").classList.remove("active");
-    document.getElementById("streetBtn").classList.remove("active");
-    document.getElementById("raceBtn").classList.remove("active");
-
-    if (type === "street") {
-        streetKit.visible = true;
-        document.getElementById("streetBtn").classList.add("active");
-    }
-    else if (type === "race") {
-        raceKit.visible = true;
-        document.getElementById("raceBtn").classList.add("active");
-    }
-    else {
-        document.getElementById("stockBtn").classList.add("active");
-    }
-
-};
-
-window.setWheels = function(type) {
-
-    wheels.forEach(wheel => {
-
-        if (type === "normal") {
-            wheel.rim.material.color.set("#aaaaaa");
-            wheel.rim.scale.set(1, 1, 1);
-        }
-
-        if (type === "sport") {
-            wheel.rim.material.color.set("#111111");
-            wheel.rim.scale.set(1.15, 1, 1.15);
-        }
-
-        if (type === "race") {
-            wheel.rim.material.color.set("#f5f5f5");
-            wheel.rim.scale.set(0.85, 1, 0.85);
-        }
-
-    });
-
-};
-
-window.setHeight = function(height) {
-    car.position.y = height;
-};
-
-window.setNeon = function(color) {
-
-    if (color === "off") {
-        neon.intensity = 0;
-    }
-
-    if (color === "cyan") {
-        neon.color.set("#00d9ff");
-        neon.intensity = 10;
-    }
-
-    if (color === "red") {
-        neon.color.set("#ff003c");
-        neon.intensity = 10;
-    }
-
-    if (color === "purple") {
-        neon.color.set("#a020f0");
-        neon.intensity = 10;
-    }
-
-};
-
-window.resetCar = function() {
-
-    carMaterial.color.set("#0066ff");
-    car.position.y = 0;
-
-    spoiler.visible = false;
-    streetKit.visible = false;
-    raceKit.visible = false;
-    neon.intensity = 0;
-
-    document.querySelectorAll(".active").forEach(button => {
-        button.classList.remove("active");
-    });
-
-    document.getElementById("stockBtn").classList.add("active");
-    document.getElementById("wingOff").classList.add("active");
-
-};
-
-window.saveCar = function() {
-
-    const build = {
-        color: "#" + carMaterial.color.getHexString(),
-        height: car.position.y,
-        spoiler: spoiler.visible,
-        streetKit: streetKit.visible,
-        raceKit: raceKit.visible,
-        neon: neon.intensity
-    };
-
-    localStorage.setItem("driveforge_build", JSON.stringify(build));
-
-    alert("BUILD SAVED! 🚗🔥");
-
-};
-
-
-/* LOAD SAVED BUILD */
-
-const savedBuild = localStorage.getItem("driveforge_build");
-
-if (savedBuild) {
-
-    const build = JSON.parse(savedBuild);
-
-    carMaterial.color.set(build.color);
-    car.position.y = build.height;
-    spoiler.visible = build.spoiler;
-    streetKit.visible = build.streetKit;
-    raceKit.visible = build.raceKit;
-    neon.intensity = build.neon;
+  });
 
 }
 
 
-/* ANIMATION */
+function toggleService(id, card) {
 
-function animate() {
+  if (selectedServices.includes(id)) {
 
-    requestAnimationFrame(animate);
+    selectedServices =
+      selectedServices.filter(service => service !== id);
 
-    controls.update();
+    card.classList.remove("selected");
 
-    wheels.forEach(wheel => {
-        wheel.group.rotation.z = 0;
-    });
+  } else {
 
-    renderer.render(scene, camera);
+    selectedServices.push(id);
+
+    card.classList.add("selected");
+
+  }
+
+  updateSummary();
+}
+
+
+function updateSummary() {
+
+  const summary =
+    document.getElementById("summaryItems");
+
+  const totalElement =
+    document.getElementById("totalPrice");
+
+
+  if (!selectedVehicle || selectedServices.length === 0) {
+
+    summary.innerHTML = `
+      <p style="color:#66717f;">
+        Vælg din bike og dine services.
+      </p>
+    `;
+
+    totalElement.innerText = "0 kr.";
+
+    return;
+  }
+
+
+  let total = 0;
+
+  summary.innerHTML = "";
+
+
+  selectedServices.forEach(id => {
+
+    const service =
+      services.find(s => s.id === id);
+
+    const price =
+      service[selectedVehicle];
+
+    total += price;
+
+
+    summary.innerHTML += `
+      <div class="summary-row">
+
+        <span>
+          ${service.name}
+        </span>
+
+        <span>
+          ${price} kr.
+        </span>
+
+      </div>
+    `;
+
+  });
+
+
+  totalElement.innerText =
+    total + " kr.";
+}
+
+
+function book() {
+
+  const name =
+    document.getElementById("name").value;
+
+  const phone =
+    document.getElementById("phone").value;
+
+  const model =
+    document.getElementById("bikeModel").value;
+
+  const message =
+    document.getElementById("message").value;
+
+
+  if (!selectedVehicle) {
+
+    alert("Vælg først din bike.");
+
+    return;
+  }
+
+
+  if (selectedServices.length === 0) {
+
+    alert("Vælg mindst én service.");
+
+    return;
+  }
+
+
+  if (!name || !phone) {
+
+    alert("Skriv navn og telefonnummer.");
+
+    return;
+  }
+
+
+  let total = 0;
+
+  let selectedText = "";
+
+
+  selectedServices.forEach(id => {
+
+    const service =
+      services.find(s => s.id === id);
+
+    total += service[selectedVehicle];
+
+    selectedText +=
+      "- " +
+      service.name +
+      " (" +
+      service[selectedVehicle] +
+      " kr.)\n";
+
+  });
+
+
+  const bookingText = `
+NY BOOKING
+
+Navn: ${name}
+Telefon: ${phone}
+
+Køretøj: ${selectedVehicle}
+Model: ${model}
+
+SERVICES:
+${selectedText}
+
+TOTAL: ${total} kr.
+
+Besked:
+${message}
+  `;
+
+
+  console.log(bookingText);
+
+
+  alert(
+    "Tak " +
+    name +
+    "! Din booking er klar.\n\n" +
+    "Total: " +
+    total +
+    " kr."
+  );
 
 }
 
-animate();
 
-
-/* RESIZE */
-
-window.addEventListener("resize", () => {
-
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-
-    renderer.setSize(
-        window.innerWidth,
-        window.innerHeight
-    );
-
-});
+renderServices();
 
 </script>
 
