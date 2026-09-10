@@ -45,23 +45,17 @@
       color: #aaa;
       text-decoration: none;
       margin-left: 25px;
-      transition: 0.2s;
-    }
-
-    nav a:hover {
-      color: white;
     }
 
     .hero {
       text-align: center;
       padding: 90px 20px 65px;
-      background:
-        radial-gradient(circle at top, rgba(50, 130, 255, 0.18), transparent 45%);
+      background: radial-gradient(circle at top, rgba(50,130,255,.18), transparent 45%);
     }
 
     .hero h1 {
       font-size: clamp(42px, 7vw, 80px);
-      line-height: 0.95;
+      line-height: .95;
       letter-spacing: -4px;
       max-width: 900px;
       margin: auto;
@@ -117,7 +111,7 @@
       padding: 28px 20px;
       border-radius: 18px;
       cursor: pointer;
-      transition: 0.2s;
+      transition: .2s;
       text-align: center;
     }
 
@@ -135,10 +129,6 @@
     .vehicle-icon {
       font-size: 42px;
       margin-bottom: 12px;
-    }
-
-    .vehicle h3 {
-      font-size: 21px;
     }
 
     .vehicle p {
@@ -161,7 +151,7 @@
       padding: 22px;
       border-radius: 16px;
       cursor: pointer;
-      transition: 0.2s;
+      transition: .2s;
     }
 
     .service:hover {
@@ -205,10 +195,6 @@
       gap: 15px;
     }
 
-    .service h3 {
-      font-size: 18px;
-    }
-
     .price {
       color: #4da3ff;
       white-space: nowrap;
@@ -228,16 +214,14 @@
       gap: 20px;
     }
 
-    .form,
-    .summary {
+    .form, .summary {
       background: #10151d;
       border: 1px solid #1c2633;
       padding: 28px;
       border-radius: 20px;
     }
 
-    input,
-    textarea {
+    input, textarea {
       width: 100%;
       padding: 15px;
       background: #090d13;
@@ -248,8 +232,7 @@
       outline: none;
     }
 
-    input:focus,
-    textarea:focus {
+    input:focus, textarea:focus {
       border-color: #4da3ff;
     }
 
@@ -297,8 +280,9 @@
       cursor: pointer;
     }
 
-    .book-btn:hover {
-      background: #3594f6;
+    .book-btn:disabled {
+      opacity: .55;
+      cursor: not-allowed;
     }
 
     .notice {
@@ -352,7 +336,6 @@
 
 <header>
   <div class="logo">BIKE<span>CARE</span></div>
-
   <nav>
     <a href="#bestil">Bestil</a>
     <a href="#services">Services</a>
@@ -362,23 +345,18 @@
 
 <div class="hero">
   <h1>GIV DIN BIKE<br><span>NYT LIV.</span></h1>
-
   <p>
     Klargøring og vedligeholdelse af cykler, Talaria og Surron.
     Vælg din bike og sammensæt selv præcis den klargøring, du ønsker.
   </p>
-
   <a href="#bestil" class="button">Sammensæt klargøring →</a>
 </div>
 
 <section id="bestil">
   <h2 class="section-title">1. Vælg din bike</h2>
-  <p class="section-description">
-    Priserne ændrer sig automatisk alt efter hvilken type du vælger.
-  </p>
+  <p class="section-description">Priserne ændrer sig automatisk efter typen.</p>
 
   <div class="vehicle-grid">
-
     <div class="vehicle" onclick="selectVehicle('cykel', this)">
       <div class="vehicle-icon">🚲</div>
       <h3>Cykel</h3>
@@ -396,46 +374,30 @@
       <h3>Surron</h3>
       <p>Light Bee osv.</p>
     </div>
-
   </div>
 </section>
 
-
 <section id="services">
   <h2 class="section-title">2. Hvad skal vi lave?</h2>
-  <p class="section-description">
-    Du kan vælge lige så mange services, du vil.
-  </p>
-
+  <p class="section-description">Du kan vælge lige så mange services, du vil.</p>
   <div class="services" id="serviceList"></div>
 </section>
-
 
 <section>
   <h2 class="section-title">3. Book klargøring</h2>
 
   <div class="checkout">
-
     <div class="form">
       <input id="name" type="text" placeholder="Dit navn">
-
       <input id="phone" type="tel" placeholder="Telefonnummer">
-
-      <input id="bikeModel" type="text"
-             placeholder="Model – fx Talaria XXX">
-
-      <textarea id="message"
-                placeholder="Ekstra besked – fx noget bestemt vi skal kigge på"></textarea>
+      <input id="bikeModel" type="text" placeholder="Model – fx Talaria XXX">
+      <textarea id="message" placeholder="Ekstra besked"></textarea>
     </div>
 
     <div class="summary">
-
       <h3>Din bestilling</h3>
-
       <div id="summaryItems">
-        <p style="color:#66717f;">
-          Vælg din bike og dine services.
-        </p>
+        <p style="color:#66717f;">Vælg din bike og dine services.</p>
       </div>
 
       <div class="total">
@@ -443,132 +405,102 @@
         <span id="totalPrice">0 kr.</span>
       </div>
 
-      <button class="book-btn" onclick="book()">
-        Send booking
-      </button>
+      <button class="book-btn" id="bookButton" onclick="book()">Send booking</button>
 
       <p class="notice">
-        Dette er en bookingforespørgsel. Din tid er først endeligt aftalt,
-        når vi har svaret dig.
+        Dette er en bookingforespørgsel. Tiden er først endeligt aftalt, når vi har svaret dig.
       </p>
-
     </div>
-
   </div>
 </section>
 
-
 <section class="about" id="omos">
   <h2 class="section-title">Om os</h2>
-
   <p>
     Vi er to venner med interesse for cykler, Talaria og Surron.
     Vi tilbyder klargøring og almindelig vedligeholdelse til fair priser,
     så din bike kan stå clean og klar til næste tur.
-    <br><br>
-    Vi fokuserer på grundigt arbejde og god service frem for dyre
-    værkstedspriser.
   </p>
 </section>
-
 
 <footer>
   © 2026 BikeCare · Cykel · Talaria · Surron
 </footer>
 
-
 <script>
+const WORKER_URL = "https://bikecare-booking.victorgryner.workers.dev";
 
 const services = [
   {
     id: "wash",
     name: "🧼 Grundig vask",
-    description:
-      "Grundig udvendig vask af stel, hjul og svært tilgængelige områder.",
+    description: "Grundig udvendig vask af stel, hjul og svært tilgængelige områder.",
     cykel: 99,
     talaria: 149,
     surron: 149
   },
-
   {
     id: "premium",
     name: "✨ Premium klargøring",
-    description:
-      "Grundig vask, rengøring af fælge og kædeområde samt flot finish.",
+    description: "Grundig vask, rengøring af fælge og kædeområde samt flot finish.",
     cykel: 199,
     talaria: 299,
     surron: 299
   },
-
   {
     id: "tires",
     name: "🛞 Dæktryk + sikkerhedstjek",
-    description:
-      "Vi kontrollerer dæktryk, dæk, bremser og tydelige løse dele.",
+    description: "Vi kontrollerer dæktryk, dæk, bremser og tydelige løse dele.",
     cykel: 49,
     talaria: 69,
     surron: 69
   },
-
   {
     id: "brakes",
     name: "🔧 Bremsejustering",
-    description:
-      "Kontrol og justering af bremser samt kontrol af synligt slid på klodser.",
+    description: "Kontrol og justering af bremser samt kontrol af synligt slid på klodser.",
     cykel: 79,
     talaria: 99,
     surron: 99
   },
-
   {
     id: "chain",
     name: "⛓️ Kæderens + smøring",
-    description:
-      "Kæden renses for snavs og gammel smøring og smøres efterfølgende.",
+    description: "Kæden renses for snavs og gammel smøring og smøres efterfølgende.",
     cykel: 79,
     talaria: 119,
     surron: 119
   },
-
   {
     id: "bolts",
     name: "🔩 Efterspænding",
-    description:
-      "Kontrol af relevante bolte og fastgørelser samt efterspænding.",
+    description: "Kontrol af relevante bolte og fastgørelser samt efterspænding.",
     cykel: 79,
     talaria: 99,
     surron: 99
   },
-
   {
     id: "wheels",
     name: "🧽 Fælge + drivetrain-rens",
-    description:
-      "Ekstra grundig rengøring omkring fælge, kæde og drivetrain.",
+    description: "Ekstra grundig rengøring omkring fælge, kæde og drivetrain.",
     cykel: 99,
     talaria: 149,
     surron: 149
   },
-
   {
     id: "full",
     name: "⭐ Fuld klargøring",
-    description:
-      "Vask, kæderens, smøring, dæktryk, bremsetjek, efterspænding og finish.",
+    description: "Vask, kæderens, smøring, dæktryk, bremsetjek, efterspænding og finish.",
     cykel: 299,
     talaria: 449,
     surron: 449
   }
 ];
 
-
 let selectedVehicle = null;
-
 let selectedServices = [];
 
-
 function selectVehicle(vehicle, element) {
-
   selectedVehicle = vehicle;
 
   document.querySelectorAll(".vehicle").forEach(v => {
@@ -576,158 +508,92 @@ function selectVehicle(vehicle, element) {
   });
 
   element.classList.add("selected");
-
   selectedServices = [];
-
   renderServices();
-
   updateSummary();
 }
 
-
 function renderServices() {
-
   const container = document.getElementById("serviceList");
-
   container.innerHTML = "";
 
   if (!selectedVehicle) {
-
-    container.innerHTML = `
-      <p style="color:#66717f;">
-        Vælg først hvilken bike du har 👆
-      </p>
-    `;
-
+    container.innerHTML = '<p style="color:#66717f;">Vælg først hvilken bike du har 👆</p>';
     return;
   }
 
-
   services.forEach(service => {
-
     const card = document.createElement("div");
-
     card.className = "service";
 
-    card.onclick = () => toggleService(service.id, card);
+    card.onclick = () => {
+      toggleService(service.id, card);
+    };
 
     card.innerHTML = `
       <div class="check"></div>
-
       <div class="service-info">
-
         <div class="service-top">
-
           <h3>${service.name}</h3>
-
-          <div class="price">
-            ${service[selectedVehicle]} kr.
-          </div>
-
+          <div class="price">${service[selectedVehicle]} kr.</div>
         </div>
-
         <p>${service.description}</p>
-
       </div>
     `;
 
     container.appendChild(card);
-
   });
-
 }
 
-
 function toggleService(id, card) {
-
   if (selectedServices.includes(id)) {
-
-    selectedServices =
-      selectedServices.filter(service => service !== id);
-
+    selectedServices = selectedServices.filter(x => x !== id);
     card.classList.remove("selected");
-
   } else {
-
     selectedServices.push(id);
-
     card.classList.add("selected");
-
   }
 
   updateSummary();
 }
 
-
 function updateSummary() {
-
-  const summary =
-    document.getElementById("summaryItems");
-
-  const totalElement =
-    document.getElementById("totalPrice");
-
+  const summary = document.getElementById("summaryItems");
+  const totalElement = document.getElementById("totalPrice");
 
   if (!selectedVehicle || selectedServices.length === 0) {
-
-    summary.innerHTML = `
-      <p style="color:#66717f;">
-        Vælg din bike og dine services.
-      </p>
-    `;
-
+    summary.innerHTML = '<p style="color:#66717f;">Vælg din bike og dine services.</p>';
     totalElement.innerText = "0 kr.";
-
     return;
   }
 
-
   let total = 0;
-
-  summary.innerHTML = "";
-
+  let html = "";
 
   selectedServices.forEach(id => {
-
-    const service =
-      services.find(s => s.id === id);
-
-    const price =
-      service[selectedVehicle];
+    const service = services.find(s => s.id === id);
+    const price = service[selectedVehicle];
 
     total += price;
 
-
-    summary.innerHTML += `
+    html += `
       <div class="summary-row">
-
-        <span>
-          ${service.name}
-        </span>
-
-        <span>
-          ${price} kr.
-        </span>
-
+        <span>${service.name}</span>
+        <span>${price} kr.</span>
       </div>
     `;
-
   });
 
-
-  totalElement.innerText =
-    total + " kr.";
+  summary.innerHTML = html;
+  totalElement.innerText = total + " kr.";
 }
 
-
 async function book() {
-
-  const WORKER_URL = "https://bikecare-booking.victorgryner.workers.dev";
-
   const name = document.getElementById("name").value.trim();
   const phone = document.getElementById("phone").value.trim();
   const model = document.getElementById("bikeModel").value.trim();
   const message = document.getElementById("message").value.trim();
+  const button = document.getElementById("bookButton");
 
   if (!selectedVehicle) {
     alert("Vælg først din bike.");
@@ -745,17 +611,18 @@ async function book() {
   }
 
   let total = 0;
-  let selectedText = "";
 
-  selectedServices.forEach(id => {
+  const selected = selectedServices.map(id => {
     const service = services.find(s => s.id === id);
-    total += service[selectedVehicle];
-    selectedText += `${service.name} — ${service[selectedVehicle]} kr.
-`;
+    const price = service[selectedVehicle];
+    total += price;
+
+    return {
+      name: service.name,
+      price: price
+    };
   });
 
-  const button = document.querySelector(".book-btn");
-  const oldText = button.innerText;
   button.disabled = true;
   button.innerText = "Sender...";
 
@@ -766,25 +633,24 @@ async function book() {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        name: name,
-        phone: phone,
+        name,
+        phone,
         vehicle: selectedVehicle,
         model: model || "Ikke angivet",
-        services: selectedText,
-        total: total,
+        services: selected,
+        total,
         message: message || "Ingen besked"
       })
     });
 
-   if (!response.ok) {
-  const errorText = await response.text();
-  alert("Fejl fra serveren: " + errorText);
-  return;
-}
+    const responseText = await response.text();
 
-    alert(`Tak ${name}! Din booking er sendt ✅
+    if (!response.ok) {
+      alert("Serverfejl: " + responseText);
+      return;
+    }
 
-Total: ${total} kr.`);
+    alert(`Booking sendt ✅\n\nTotal: ${total} kr.`);
 
     document.getElementById("name").value = "";
     document.getElementById("phone").value = "";
@@ -793,15 +659,15 @@ Total: ${total} kr.`);
 
   } catch (error) {
     console.error(error);
-    alert("Kunne ikke sende bookingen. Prøv igen.");
+    alert("Kunne ikke kontakte booking-serveren.");
   } finally {
     button.disabled = false;
-    button.innerText = oldText;
+    button.innerText = "Send booking";
   }
 }
-renderServices();
 
+renderServices();
 </script>
 
 </body>
-</html
+</html>
