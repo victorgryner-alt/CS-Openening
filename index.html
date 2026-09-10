@@ -776,9 +776,11 @@ async function book() {
       })
     });
 
-    if (!response.ok) {
-      throw new Error("Worker returnerede " + response.status);
-    }
+   if (!response.ok) {
+  const errorText = await response.text();
+  alert("Fejl fra serveren: " + errorText);
+  return;
+}
 
     alert(`Tak ${name}! Din booking er sendt ✅
 
