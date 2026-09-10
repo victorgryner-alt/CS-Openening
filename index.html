@@ -4,376 +4,68 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BikeCare | Klargøring</title>
-
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
-
-    body {
-      background: #080b10;
-      color: white;
-      min-height: 100vh;
-    }
-
-    header {
-      padding: 22px 7%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #1c2430;
-      background: rgba(8, 11, 16, 0.95);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .logo {
-      font-size: 26px;
-      font-weight: 900;
-      letter-spacing: -1px;
-    }
-
-    .logo span {
-      color: #4da3ff;
-    }
-
-    nav a {
-      color: #aaa;
-      text-decoration: none;
-      margin-left: 25px;
-    }
-
-    .hero {
-      text-align: center;
-      padding: 90px 20px 65px;
-      background: radial-gradient(circle at top, rgba(50,130,255,.18), transparent 45%);
-    }
-
-    .hero h1 {
-      font-size: clamp(42px, 7vw, 80px);
-      line-height: .95;
-      letter-spacing: -4px;
-      max-width: 900px;
-      margin: auto;
-    }
-
-    .hero h1 span {
-      color: #4da3ff;
-    }
-
-    .hero p {
-      color: #9ba5b3;
-      max-width: 650px;
-      margin: 25px auto;
-      font-size: 18px;
-      line-height: 1.6;
-    }
-
-    .button {
-      display: inline-block;
-      background: #4da3ff;
-      color: white;
-      padding: 14px 24px;
-      border-radius: 12px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    section {
-      width: min(1100px, 92%);
-      margin: auto;
-      padding: 60px 0;
-    }
-
-    .section-title {
-      font-size: 38px;
-      margin-bottom: 10px;
-    }
-
-    .section-description {
-      color: #87909e;
-      margin-bottom: 35px;
-    }
-
-    .vehicle-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-    }
-
-    .vehicle {
-      background: #10151d;
-      border: 2px solid #1b2430;
-      padding: 28px 20px;
-      border-radius: 18px;
-      cursor: pointer;
-      transition: .2s;
-      text-align: center;
-    }
-
-    .vehicle:hover {
-      transform: translateY(-3px);
-      border-color: #3a4d64;
-    }
-
-    .vehicle.selected {
-      border-color: #4da3ff;
-      background: #101c2a;
-      box-shadow: 0 0 35px rgba(77,163,255,.12);
-    }
-
-    .vehicle-icon {
-      font-size: 42px;
-      margin-bottom: 12px;
-    }
-
-    .vehicle p {
-      color: #77808d;
-      margin-top: 5px;
-      font-size: 14px;
-    }
-
-    .services {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-    }
-
-    .service {
-      display: flex;
-      gap: 15px;
-      background: #10151d;
-      border: 2px solid #1b2430;
-      padding: 22px;
-      border-radius: 16px;
-      cursor: pointer;
-      transition: .2s;
-    }
-
-    .service:hover {
-      border-color: #344459;
-    }
-
-    .service.selected {
-      border-color: #4da3ff;
-      background: #101c2a;
-    }
-
-    .check {
-      width: 25px;
-      min-width: 25px;
-      height: 25px;
-      border: 2px solid #4b5665;
-      border-radius: 7px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: 3px;
-      font-weight: bold;
-    }
-
-    .service.selected .check {
-      background: #4da3ff;
-      border-color: #4da3ff;
-    }
-
-    .service.selected .check::after {
-      content: "✓";
-    }
-
-    .service-info {
-      flex: 1;
-    }
-
-    .service-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 15px;
-    }
-
-    .price {
-      color: #4da3ff;
-      white-space: nowrap;
-      font-weight: 800;
-    }
-
-    .service p {
-      color: #828c99;
-      font-size: 14px;
-      line-height: 1.5;
-      margin-top: 8px;
-    }
-
-    .checkout {
-      display: grid;
-      grid-template-columns: 1.3fr .7fr;
-      gap: 20px;
-    }
-
-    .form, .summary {
-      background: #10151d;
-      border: 1px solid #1c2633;
-      padding: 28px;
-      border-radius: 20px;
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 15px;
-      background: #090d13;
-      border: 1px solid #273342;
-      border-radius: 10px;
-      color: white;
-      margin-bottom: 12px;
-      outline: none;
-    }
-
-    input:focus, textarea:focus {
-      border-color: #4da3ff;
-    }
-
-    textarea {
-      min-height: 110px;
-      resize: vertical;
-    }
-
-    .summary h3 {
-      margin-bottom: 20px;
-    }
-
-    .summary-row {
-      display: flex;
-      justify-content: space-between;
-      color: #a0a8b3;
-      margin-bottom: 13px;
-      gap: 15px;
-    }
-
-    .total {
-      display: flex;
-      justify-content: space-between;
-      border-top: 1px solid #283240;
-      padding-top: 20px;
-      margin-top: 20px;
-      font-size: 25px;
-      font-weight: 900;
-    }
-
-    .total span:last-child {
-      color: #4da3ff;
-    }
-
-    .book-btn {
-      width: 100%;
-      margin-top: 20px;
-      border: none;
-      background: #4da3ff;
-      color: white;
-      padding: 16px;
-      border-radius: 11px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .book-btn:disabled {
-      opacity: .55;
-      cursor: not-allowed;
-    }
-
-    .notice {
-      color: #68727f;
-      font-size: 12px;
-      margin-top: 12px;
-      line-height: 1.5;
-    }
-
-    .about {
-      text-align: center;
-      max-width: 750px;
-    }
-
-    .about p {
-      color: #8d97a5;
-      line-height: 1.8;
-    }
-
-    footer {
-      border-top: 1px solid #1b2430;
-      text-align: center;
-      color: #596371;
-      padding: 30px;
-      margin-top: 50px;
-    }
-
-    @media(max-width: 750px) {
-      nav {
-        display: none;
-      }
-
-      .vehicle-grid,
-      .services,
-      .checkout {
-        grid-template-columns: 1fr;
-      }
-
-      .hero {
-        padding-top: 65px;
-      }
-
-      .hero h1 {
-        letter-spacing: -2px;
-      }
-    }
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+    body{background:#080b10;color:#fff;min-height:100vh}
+    header{padding:22px 7%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #1c2430;background:rgba(8,11,16,.95);position:sticky;top:0;z-index:100}
+    .logo{font-size:26px;font-weight:900;letter-spacing:-1px}.logo span{color:#4da3ff}
+    nav a{color:#aaa;text-decoration:none;margin-left:25px}
+    .hero{text-align:center;padding:90px 20px 65px;background:radial-gradient(circle at top,rgba(50,130,255,.18),transparent 45%)}
+    .hero h1{font-size:clamp(42px,7vw,80px);line-height:.95;letter-spacing:-4px;max-width:900px;margin:auto}
+    .hero h1 span{color:#4da3ff}
+    .hero p{color:#9ba5b3;max-width:650px;margin:25px auto;font-size:18px;line-height:1.6}
+    .button{display:inline-block;background:#4da3ff;color:#fff;padding:14px 24px;border-radius:12px;text-decoration:none;font-weight:bold}
+    section{width:min(1100px,92%);margin:auto;padding:60px 0}
+    .section-title{font-size:38px;margin-bottom:10px}.section-description{color:#87909e;margin-bottom:35px}
+    .vehicle-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+    .vehicle{background:#10151d;border:2px solid #1b2430;padding:28px 20px;border-radius:18px;cursor:pointer;transition:.2s;text-align:center}
+    .vehicle:hover{transform:translateY(-3px);border-color:#3a4d64}
+    .vehicle.selected{border-color:#4da3ff;background:#101c2a;box-shadow:0 0 35px rgba(77,163,255,.12)}
+    .vehicle-icon{font-size:42px;margin-bottom:12px}.vehicle p{color:#77808d;margin-top:5px;font-size:14px}
+    .services{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
+    .service{display:flex;gap:15px;background:#10151d;border:2px solid #1b2430;padding:22px;border-radius:16px;cursor:pointer;transition:.2s}
+    .service:hover{border-color:#344459}.service.selected{border-color:#4da3ff;background:#101c2a}
+    .check{width:25px;min-width:25px;height:25px;border:2px solid #4b5665;border-radius:7px;display:flex;align-items:center;justify-content:center;margin-top:3px;font-weight:bold}
+    .service.selected .check{background:#4da3ff;border-color:#4da3ff}.service.selected .check::after{content:"✓"}
+    .service-info{flex:1}.service-top{display:flex;justify-content:space-between;gap:15px}
+    .price{color:#4da3ff;white-space:nowrap;font-weight:800}.service p{color:#828c99;font-size:14px;line-height:1.5;margin-top:8px}
+    .checkout{display:grid;grid-template-columns:1.3fr .7fr;gap:20px}
+    .form,.summary{background:#10151d;border:1px solid #1c2633;padding:28px;border-radius:20px}
+    input,textarea,select{width:100%;padding:15px;background:#090d13;border:1px solid #273342;border-radius:10px;color:#fff;margin-bottom:12px;outline:none}
+    input:focus,textarea:focus,select:focus{border-color:#4da3ff}
+    textarea{min-height:110px;resize:vertical}
+    .phone-row{display:grid;grid-template-columns:150px 1fr;gap:10px}
+    .summary h3{margin-bottom:20px}.summary-row{display:flex;justify-content:space-between;color:#a0a8b3;margin-bottom:13px;gap:15px}
+    .total{display:flex;justify-content:space-between;border-top:1px solid #283240;padding-top:20px;margin-top:20px;font-size:25px;font-weight:900}
+    .total span:last-child{color:#4da3ff}
+    .book-btn{width:100%;margin-top:20px;border:none;background:#4da3ff;color:#fff;padding:16px;border-radius:11px;font-size:16px;font-weight:bold;cursor:pointer}
+    .book-btn:disabled{opacity:.55;cursor:not-allowed}
+    .notice{color:#68727f;font-size:12px;margin-top:12px;line-height:1.5}
+    .about{text-align:center;max-width:750px}.about p{color:#8d97a5;line-height:1.8}
+    footer{border-top:1px solid #1b2430;text-align:center;color:#596371;padding:30px;margin-top:50px}
+    @media(max-width:750px){nav{display:none}.vehicle-grid,.services,.checkout{grid-template-columns:1fr}.phone-row{grid-template-columns:1fr}.hero{padding-top:65px}.hero h1{letter-spacing:-2px}}
   </style>
 </head>
-
 <body>
 
 <header>
   <div class="logo">BIKE<span>CARE</span></div>
-  <nav>
-    <a href="#bestil">Bestil</a>
-    <a href="#services">Services</a>
-    <a href="#omos">Om os</a>
-  </nav>
+  <nav><a href="#bestil">Bestil</a><a href="#services">Services</a><a href="#omos">Om os</a></nav>
 </header>
 
 <div class="hero">
   <h1>GIV DIN BIKE<br><span>NYT LIV.</span></h1>
-  <p>
-    Klargøring og vedligeholdelse af cykler, Talaria og Surron.
-    Vælg din bike og sammensæt selv præcis den klargøring, du ønsker.
-  </p>
+  <p>Klargøring og vedligeholdelse af cykler, Talaria og Surron. Vælg din bike og sammensæt selv præcis den klargøring, du ønsker.</p>
   <a href="#bestil" class="button">Sammensæt klargøring →</a>
 </div>
 
 <section id="bestil">
   <h2 class="section-title">1. Vælg din bike</h2>
   <p class="section-description">Priserne ændrer sig automatisk efter typen.</p>
-
   <div class="vehicle-grid">
-    <div class="vehicle" onclick="selectVehicle('cykel', this)">
-      <div class="vehicle-icon">🚲</div>
-      <h3>Cykel</h3>
-      <p>MTB, citybike osv.</p>
-    </div>
-
-    <div class="vehicle" onclick="selectVehicle('talaria', this)">
-      <div class="vehicle-icon">⚡</div>
-      <h3>Talaria</h3>
-      <p>XXX, Sting osv.</p>
-    </div>
-
-    <div class="vehicle" onclick="selectVehicle('surron', this)">
-      <div class="vehicle-icon">🏍️</div>
-      <h3>Surron</h3>
-      <p>Light Bee osv.</p>
-    </div>
+    <div class="vehicle" onclick="selectVehicle('cykel',this)"><div class="vehicle-icon">🚲</div><h3>Cykel</h3><p>MTB, citybike osv.</p></div>
+    <div class="vehicle" onclick="selectVehicle('talaria',this)"><div class="vehicle-icon">⚡</div><h3>Talaria</h3><p>XXX, Sting osv.</p></div>
+    <div class="vehicle" onclick="selectVehicle('surron',this)"><div class="vehicle-icon">🏍️</div><h3>Surron</h3><p>Light Bee osv.</p></div>
   </div>
 </section>
 
@@ -385,289 +77,181 @@
 
 <section>
   <h2 class="section-title">3. Book klargøring</h2>
-
   <div class="checkout">
     <div class="form">
       <input id="name" type="text" placeholder="Dit navn">
-      <input id="phone" type="tel" placeholder="Telefonnummer">
+
+      <div class="phone-row">
+        <select id="countryCode">
+          <option value="+45">🇩🇰 +45 Danmark</option>
+          <option value="+46">🇸🇪 +46 Sverige</option>
+          <option value="+47">🇳🇴 +47 Norge</option>
+          <option value="+49">🇩🇪 +49 Tyskland</option>
+          <option value="+31">🇳🇱 +31 Holland</option>
+          <option value="+44">🇬🇧 +44 Storbritannien</option>
+          <option value="+1">🇺🇸 +1 USA/Canada</option>
+          <option value="+33">🇫🇷 +33 Frankrig</option>
+          <option value="+34">🇪🇸 +34 Spanien</option>
+        </select>
+        <input id="phone" type="tel" placeholder="Telefonnummer">
+      </div>
+
       <input id="bikeModel" type="text" placeholder="Model – fx Talaria XXX">
       <textarea id="message" placeholder="Ekstra besked"></textarea>
     </div>
 
     <div class="summary">
       <h3>Din bestilling</h3>
-      <div id="summaryItems">
-        <p style="color:#66717f;">Vælg din bike og dine services.</p>
-      </div>
-
-      <div class="total">
-        <span>Total</span>
-        <span id="totalPrice">0 kr.</span>
-      </div>
-
+      <div id="summaryItems"><p style="color:#66717f;">Vælg din bike og dine services.</p></div>
+      <div class="total"><span>Total</span><span id="totalPrice">0 kr.</span></div>
       <button class="book-btn" id="bookButton" onclick="book()">Send booking</button>
-
-      <p class="notice">
-        Dette er en bookingforespørgsel. Tiden er først endeligt aftalt, når vi har svaret dig.
-      </p>
+      <p class="notice">Dette er en bookingforespørgsel. Tiden er først endeligt aftalt, når vi har svaret dig.</p>
     </div>
   </div>
 </section>
 
 <section class="about" id="omos">
   <h2 class="section-title">Om os</h2>
-  <p>
-    Vi er to venner med interesse for cykler, Talaria og Surron.
-    Vi tilbyder klargøring og almindelig vedligeholdelse til fair priser,
-    så din bike kan stå clean og klar til næste tur.
-  </p>
+  <p>Vi er to venner med interesse for cykler, Talaria og Surron. Vi tilbyder klargøring og almindelig vedligeholdelse til fair priser, så din bike kan stå clean og klar til næste tur.</p>
 </section>
 
-<footer>
-  © 2026 BikeCare · Cykel · Talaria · Surron
-</footer>
+<footer>© 2026 BikeCare · Cykel · Talaria · Surron</footer>
 
 <script>
-const WORKER_URL = "https://bikecare-booking.victorgryner.workers.dev";
+const WORKER_URL="https://bikecare-booking.victorgryner.workers.dev";
 
-const services = [
-  {
-    id: "wash",
-    name: "🧼 Grundig vask",
-    description: "Grundig udvendig vask af stel, hjul og svært tilgængelige områder.",
-    cykel: 99,
-    talaria: 149,
-    surron: 149
-  },
-  {
-    id: "premium",
-    name: "✨ Premium klargøring",
-    description: "Grundig vask, rengøring af fælge og kædeområde samt flot finish.",
-    cykel: 199,
-    talaria: 299,
-    surron: 299
-  },
-  {
-    id: "tires",
-    name: "🛞 Dæktryk + sikkerhedstjek",
-    description: "Vi kontrollerer dæktryk, dæk, bremser og tydelige løse dele.",
-    cykel: 49,
-    talaria: 69,
-    surron: 69
-  },
-  {
-    id: "brakes",
-    name: "🔧 Bremsejustering",
-    description: "Kontrol og justering af bremser samt kontrol af synligt slid på klodser.",
-    cykel: 79,
-    talaria: 99,
-    surron: 99
-  },
-  {
-    id: "chain",
-    name: "⛓️ Kæderens + smøring",
-    description: "Kæden renses for snavs og gammel smøring og smøres efterfølgende.",
-    cykel: 79,
-    talaria: 119,
-    surron: 119
-  },
-  {
-    id: "bolts",
-    name: "🔩 Efterspænding",
-    description: "Kontrol af relevante bolte og fastgørelser samt efterspænding.",
-    cykel: 79,
-    talaria: 99,
-    surron: 99
-  },
-  {
-    id: "wheels",
-    name: "🧽 Fælge + drivetrain-rens",
-    description: "Ekstra grundig rengøring omkring fælge, kæde og drivetrain.",
-    cykel: 99,
-    talaria: 149,
-    surron: 149
-  },
-  {
-    id: "full",
-    name: "⭐ Fuld klargøring",
-    description: "Vask, kæderens, smøring, dæktryk, bremsetjek, efterspænding og finish.",
-    cykel: 299,
-    talaria: 449,
-    surron: 449
-  }
+const services=[
+{id:"wash",name:"🧼 Grundig vask",description:"Grundig udvendig vask af stel, hjul og svært tilgængelige områder.",cykel:99,talaria:149,surron:149},
+{id:"premium",name:"✨ Premium klargøring",description:"Grundig vask, rengøring af fælge og kædeområde samt flot finish.",cykel:199,talaria:299,surron:299},
+{id:"tires",name:"🛞 Dæktryk + sikkerhedstjek",description:"Vi kontrollerer dæktryk, dæk, bremser og tydelige løse dele.",cykel:49,talaria:69,surron:69},
+{id:"brakes",name:"🔧 Bremsejustering",description:"Kontrol og justering af bremser samt kontrol af synligt slid på klodser.",cykel:79,talaria:99,surron:99},
+{id:"chain",name:"⛓️ Kæderens + smøring",description:"Kæden renses for snavs og gammel smøring og smøres efterfølgende.",cykel:79,talaria:119,surron:119},
+{id:"bolts",name:"🔩 Efterspænding",description:"Kontrol af relevante bolte og fastgørelser samt efterspænding.",cykel:79,talaria:99,surron:99},
+{id:"wheels",name:"🧽 Fælge + drivetrain-rens",description:"Ekstra grundig rengøring omkring fælge, kæde og drivetrain.",cykel:99,talaria:149,surron:149},
+{id:"full",name:"⭐ Fuld klargøring",description:"Vask, kæderens, smøring, dæktryk, bremsetjek, efterspænding og finish.",cykel:299,talaria:449,surron:449}
 ];
 
-let selectedVehicle = null;
-let selectedServices = [];
+let selectedVehicle=null;
+let selectedServices=[];
 
-function selectVehicle(vehicle, element) {
-  selectedVehicle = vehicle;
-
-  document.querySelectorAll(".vehicle").forEach(v => {
-    v.classList.remove("selected");
-  });
-
+function selectVehicle(vehicle,element){
+  selectedVehicle=vehicle;
+  document.querySelectorAll(".vehicle").forEach(v=>v.classList.remove("selected"));
   element.classList.add("selected");
-  selectedServices = [];
+  selectedServices=[];
   renderServices();
   updateSummary();
 }
 
-function renderServices() {
-  const container = document.getElementById("serviceList");
-  container.innerHTML = "";
-
-  if (!selectedVehicle) {
-    container.innerHTML = '<p style="color:#66717f;">Vælg først hvilken bike du har 👆</p>';
+function renderServices(){
+  const container=document.getElementById("serviceList");
+  container.innerHTML="";
+  if(!selectedVehicle){
+    container.innerHTML='<p style="color:#66717f;">Vælg først hvilken bike du har 👆</p>';
     return;
   }
 
-  services.forEach(service => {
-    const card = document.createElement("div");
-    card.className = "service";
-
-    card.onclick = () => {
-      toggleService(service.id, card);
-    };
-
-    card.innerHTML = `
-      <div class="check"></div>
-      <div class="service-info">
-        <div class="service-top">
-          <h3>${service.name}</h3>
-          <div class="price">${service[selectedVehicle]} kr.</div>
-        </div>
-        <p>${service.description}</p>
-      </div>
-    `;
-
+  services.forEach(service=>{
+    const card=document.createElement("div");
+    card.className="service";
+    card.onclick=()=>toggleService(service.id,card);
+    card.innerHTML=`<div class="check"></div><div class="service-info"><div class="service-top"><h3>${service.name}</h3><div class="price">${service[selectedVehicle]} kr.</div></div><p>${service.description}</p></div>`;
     container.appendChild(card);
   });
 }
 
-function toggleService(id, card) {
-  if (selectedServices.includes(id)) {
-    selectedServices = selectedServices.filter(x => x !== id);
+function toggleService(id,card){
+  if(selectedServices.includes(id)){
+    selectedServices=selectedServices.filter(x=>x!==id);
     card.classList.remove("selected");
-  } else {
+  }else{
     selectedServices.push(id);
     card.classList.add("selected");
   }
-
   updateSummary();
 }
 
-function updateSummary() {
-  const summary = document.getElementById("summaryItems");
-  const totalElement = document.getElementById("totalPrice");
+function updateSummary(){
+  const summary=document.getElementById("summaryItems");
+  const totalElement=document.getElementById("totalPrice");
 
-  if (!selectedVehicle || selectedServices.length === 0) {
-    summary.innerHTML = '<p style="color:#66717f;">Vælg din bike og dine services.</p>';
-    totalElement.innerText = "0 kr.";
+  if(!selectedVehicle||selectedServices.length===0){
+    summary.innerHTML='<p style="color:#66717f;">Vælg din bike og dine services.</p>';
+    totalElement.innerText="0 kr.";
     return;
   }
 
-  let total = 0;
-  let html = "";
-
-  selectedServices.forEach(id => {
-    const service = services.find(s => s.id === id);
-    const price = service[selectedVehicle];
-
-    total += price;
-
-    html += `
-      <div class="summary-row">
-        <span>${service.name}</span>
-        <span>${price} kr.</span>
-      </div>
-    `;
+  let total=0;
+  let html="";
+  selectedServices.forEach(id=>{
+    const service=services.find(s=>s.id===id);
+    const price=service[selectedVehicle];
+    total+=price;
+    html+=`<div class="summary-row"><span>${service.name}</span><span>${price} kr.</span></div>`;
   });
 
-  summary.innerHTML = html;
-  totalElement.innerText = total + " kr.";
+  summary.innerHTML=html;
+  totalElement.innerText=total+" kr.";
 }
 
-async function book() {
-  const name = document.getElementById("name").value.trim();
-  const phone = document.getElementById("phone").value.trim();
-  const model = document.getElementById("bikeModel").value.trim();
-  const message = document.getElementById("message").value.trim();
-  const button = document.getElementById("bookButton");
+async function book(){
+  const name=document.getElementById("name").value.trim();
+  const countryCode=document.getElementById("countryCode").value;
+  const phoneRaw=document.getElementById("phone").value.trim();
+  const phone=`${countryCode} ${phoneRaw}`;
+  const model=document.getElementById("bikeModel").value.trim();
+  const message=document.getElementById("message").value.trim();
+  const button=document.getElementById("bookButton");
 
-  if (!selectedVehicle) {
-    alert("Vælg først din bike.");
-    return;
-  }
+  if(!selectedVehicle){alert("Vælg først din bike.");return;}
+  if(selectedServices.length===0){alert("Vælg mindst én service.");return;}
+  if(!name||!phoneRaw){alert("Skriv navn og telefonnummer.");return;}
 
-  if (selectedServices.length === 0) {
-    alert("Vælg mindst én service.");
-    return;
-  }
-
-  if (!name || !phone) {
-    alert("Skriv navn og telefonnummer.");
-    return;
-  }
-
-  let total = 0;
-
-  const selected = selectedServices.map(id => {
-    const service = services.find(s => s.id === id);
-    const price = service[selectedVehicle];
-    total += price;
-
-    return {
-      name: service.name,
-      price: price
-    };
+  let total=0;
+  const selected=selectedServices.map(id=>{
+    const service=services.find(s=>s.id===id);
+    const price=service[selectedVehicle];
+    total+=price;
+    return{name:service.name,price};
   });
 
-  button.disabled = true;
-  button.innerText = "Sender...";
+  button.disabled=true;
+  button.innerText="Sender...";
 
-  try {
-    const response = await fetch(WORKER_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
+  try{
+    const response=await fetch(WORKER_URL,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
         name,
         phone,
-        vehicle: selectedVehicle,
-        model: model || "Ikke angivet",
-        services: selected,
+        countryCode,
+        vehicle:selectedVehicle,
+        model:model||"Ikke angivet",
+        services:selected,
         total,
-        message: message || "Ingen besked"
+        message:message||"Ingen besked"
       })
     });
 
-    const responseText = await response.text();
-
-    if (!response.ok) {
-      alert("Serverfejl: " + responseText);
-      return;
-    }
+    const responseText=await response.text();
+    if(!response.ok){alert("Serverfejl: "+responseText);return;}
 
     alert(`Booking sendt ✅\n\nTotal: ${total} kr.`);
-
-    document.getElementById("name").value = "";
-    document.getElementById("phone").value = "";
-    document.getElementById("bikeModel").value = "";
-    document.getElementById("message").value = "";
-
-  } catch (error) {
+    document.getElementById("name").value="";
+    document.getElementById("phone").value="";
+    document.getElementById("bikeModel").value="";
+    document.getElementById("message").value="";
+  }catch(error){
     console.error(error);
     alert("Kunne ikke kontakte booking-serveren.");
-  } finally {
-    button.disabled = false;
-    button.innerText = "Send booking";
+  }finally{
+    button.disabled=false;
+    button.innerText="Send booking";
   }
 }
 
 renderServices();
 </script>
-
 </body>
 </html>
