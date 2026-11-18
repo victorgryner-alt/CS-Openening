@@ -1,257 +1,486 @@
+
 <!DOCTYPE html>
 <html lang="da">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BikeCare | Klargøring</title>
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-    body{background:#080b10;color:#fff;min-height:100vh}
-    header{padding:22px 7%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #1c2430;background:rgba(8,11,16,.95);position:sticky;top:0;z-index:100}
-    .logo{font-size:26px;font-weight:900;letter-spacing:-1px}.logo span{color:#4da3ff}
-    nav a{color:#aaa;text-decoration:none;margin-left:25px}
-    .hero{text-align:center;padding:90px 20px 65px;background:radial-gradient(circle at top,rgba(50,130,255,.18),transparent 45%)}
-    .hero h1{font-size:clamp(42px,7vw,80px);line-height:.95;letter-spacing:-4px;max-width:900px;margin:auto}
-    .hero h1 span{color:#4da3ff}
-    .hero p{color:#9ba5b3;max-width:650px;margin:25px auto;font-size:18px;line-height:1.6}
-    .button{display:inline-block;background:#4da3ff;color:#fff;padding:14px 24px;border-radius:12px;text-decoration:none;font-weight:bold}
-    section{width:min(1100px,92%);margin:auto;padding:60px 0}
-    .section-title{font-size:38px;margin-bottom:10px}.section-description{color:#87909e;margin-bottom:35px}
-    .vehicle-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
-    .vehicle{background:#10151d;border:2px solid #1b2430;padding:28px 20px;border-radius:18px;cursor:pointer;transition:.2s;text-align:center}
-    .vehicle:hover{transform:translateY(-3px);border-color:#3a4d64}
-    .vehicle.selected{border-color:#4da3ff;background:#101c2a;box-shadow:0 0 35px rgba(77,163,255,.12)}
-    .vehicle-icon{font-size:42px;margin-bottom:12px}.vehicle p{color:#77808d;margin-top:5px;font-size:14px}
-    .services{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
-    .service{display:flex;gap:15px;background:#10151d;border:2px solid #1b2430;padding:22px;border-radius:16px;cursor:pointer;transition:.2s}
-    .service:hover{border-color:#344459}.service.selected{border-color:#4da3ff;background:#101c2a}
-    .check{width:25px;min-width:25px;height:25px;border:2px solid #4b5665;border-radius:7px;display:flex;align-items:center;justify-content:center;margin-top:3px;font-weight:bold}
-    .service.selected .check{background:#4da3ff;border-color:#4da3ff}.service.selected .check::after{content:"✓"}
-    .service-info{flex:1}.service-top{display:flex;justify-content:space-between;gap:15px}
-    .price{color:#4da3ff;white-space:nowrap;font-weight:800}.service p{color:#828c99;font-size:14px;line-height:1.5;margin-top:8px}
-    .checkout{display:grid;grid-template-columns:1.3fr .7fr;gap:20px}
-    .form,.summary{background:#10151d;border:1px solid #1c2633;padding:28px;border-radius:20px}
-    input,textarea,select{width:100%;padding:15px;background:#090d13;border:1px solid #273342;border-radius:10px;color:#fff;margin-bottom:12px;outline:none}
-    input:focus,textarea:focus,select:focus{border-color:#4da3ff}
-    textarea{min-height:110px;resize:vertical}
-    .phone-row{display:grid;grid-template-columns:150px 1fr;gap:10px}
-    .summary h3{margin-bottom:20px}.summary-row{display:flex;justify-content:space-between;color:#a0a8b3;margin-bottom:13px;gap:15px}
-    .total{display:flex;justify-content:space-between;border-top:1px solid #283240;padding-top:20px;margin-top:20px;font-size:25px;font-weight:900}
-    .total span:last-child{color:#4da3ff}
-    .book-btn{width:100%;margin-top:20px;border:none;background:#4da3ff;color:#fff;padding:16px;border-radius:11px;font-size:16px;font-weight:bold;cursor:pointer}
-    .book-btn:disabled{opacity:.55;cursor:not-allowed}
-    .notice{color:#68727f;font-size:12px;margin-top:12px;line-height:1.5}
-    .about{text-align:center;max-width:750px}.about p{color:#8d97a5;line-height:1.8}
-    footer{border-top:1px solid #1b2430;text-align:center;color:#596371;padding:30px;margin-top:50px}
-    @media(max-width:750px){nav{display:none}.vehicle-grid,.services,.checkout{grid-template-columns:1fr}.phone-row{grid-template-columns:1fr}.hero{padding-top:65px}.hero h1{letter-spacing:-2px}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TimeTrack - Mine arbejdstimer</title>
+<style>
+:root {
+  --bg:#0b1020;
+  --panel:#151f35;
+  --line:#293752;
+  --text:#f3f6ff;
+  --muted:#91a0ba;
+  --purple:#8b7cff;
+  --green:#40d6a0;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:radial-gradient(ellipse at 15% 0%,#292252,transparent 40%),var(--bg);
+  color:var(--text);
+  font-family:Inter,Arial,sans-serif;
+}
+.wrap{max-width:1150px;margin:auto;padding:30px 20px}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px}
+.logo{display:flex;align-items:center;gap:12px}
+.icon{background:linear-gradient(135deg,#8b7cff,#45c9db);padding:13px;border-radius:14px;font-size:23px}
+h1{font-size:23px;margin:0}
+header p{color:var(--muted);margin:3px 0}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.card,.panel{
+  background:linear-gradient(145deg,#18233b,#10182a);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:20px;
+  box-shadow:0 10px 30px #0002;
+}
+.label{font-size:12px;color:var(--muted)}
+.value{font-size:27px;font-weight:800;margin:8px 0}
+.green{color:var(--green)}
+.purple{color:#aaa0ff}
+small{color:var(--muted)}
+.layout{display:grid;grid-template-columns:360px 1fr;gap:18px}
+.panel{margin-bottom:18px}
+h2{font-size:18px;margin:0 0 16px}
+.field{margin-bottom:13px}
+label{display:block;color:#b7c2d8;font-size:12px;margin-bottom:6px}
+input,select{
+  width:100%;padding:12px;
+  background:#0b1324;border:1px solid var(--line);
+  border-radius:10px;color:white;font-size:14px;
+}
+input:focus{outline:1px solid var(--purple)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button{
+  cursor:pointer;border:0;border-radius:10px;
+  padding:12px;font-size:14px;font-weight:bold;
+}
+.primary{
+  width:100%;color:white;
+  background:linear-gradient(135deg,#8b7cff,#655de0);
+}
+.secondary{background:#24314c;color:white}
+.danger{background:#482331;color:#ff9aaa}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px}
+table{width:100%;border-collapse:collapse;min-width:550px}
+th,td{text-align:left;padding:12px 8px;border-bottom:1px solid var(--line);font-size:13px}
+th{color:var(--muted);font-size:11px}
+.money{color:var(--green);font-weight:bold}
+.tablewrap{overflow-x:auto}
+.hint{color:var(--muted);font-size:11px;margin-top:10px}
+.tiny{padding:6px 9px;background:#24314c;color:white;margin:2px}
+.progress{height:9px;background:#293752;border-radius:20px;overflow:hidden;margin:12px 0}
+.progress span{display:block;height:100%;background:linear-gradient(90deg,#8b7cff,#40d6a0)}
+.empty{text-align:center;color:var(--muted);padding:25px}
+.bottom{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:850px){
+  .layout{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:500px){
+  .wrap{padding:15px}
+  .bottom{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body>
+<div class="wrap">
 
 <header>
-  <div class="logo">BIKE<span>CARE</span></div>
-  <nav><a href="#bestil">Bestil</a><a href="#services">Services</a><a href="#omos">Om os</a></nav>
+  <div class="logo">
+    <div class="icon">◷</div>
+    <div>
+      <h1>TimeTrack</h1>
+      <p>Hold styr på dine timer og din løn</p>
+    </div>
+  </div>
+  <small>PERSONLIGT LØNOVERBLIK</small>
 </header>
 
-<div class="hero">
-  <h1>GIV DIN BIKE<br><span>NYT LIV.</span></h1>
-  <p>Klargøring og vedligeholdelse af cykler, Talaria og Surron. Vælg din bike og sammensæt selv præcis den klargøring, du ønsker.</p>
-  <a href="#bestil" class="button">Sammensæt klargøring →</a>
+<div class="stats">
+  <div class="card">
+    <div class="label">TJENT I ALT</div>
+    <div class="value green" id="totalPay">0 kr.</div>
+    <small id="totalHours">0 timer</small>
+  </div>
+  <div class="card">
+    <div class="label">DENNE MÅNED</div>
+    <div class="value" id="monthPay">0 kr.</div>
+    <small id="monthHours">0 timer</small>
+  </div>
+  <div class="card">
+    <div class="label">DENNE UGE</div>
+    <div class="value" id="weekPay">0 kr.</div>
+    <small id="weekHours">0 timer</small>
+  </div>
+  <div class="card">
+    <div class="label">GENNEMSNIT PR. VAGT</div>
+    <div class="value purple" id="average">0 kr.</div>
+    <small id="shiftCount">0 vagter</small>
+  </div>
 </div>
 
-<section id="bestil">
-  <h2 class="section-title">1. Vælg din bike</h2>
-  <p class="section-description">Priserne ændrer sig automatisk efter typen.</p>
-  <div class="vehicle-grid">
-    <div class="vehicle" onclick="selectVehicle('cykel',this)"><div class="vehicle-icon">🚲</div><h3>Cykel</h3><p>MTB, citybike osv.</p></div>
-    <div class="vehicle" onclick="selectVehicle('talaria',this)"><div class="vehicle-icon">⚡</div><h3>Talaria</h3><p>XXX, Sting osv.</p></div>
-    <div class="vehicle" onclick="selectVehicle('surron',this)"><div class="vehicle-icon">🏍️</div><h3>Surron</h3><p>Light Bee osv.</p></div>
+<div class="layout">
+<div>
+
+<section class="panel">
+<h2 id="formTitle">＋ Tilføj arbejdstimer</h2>
+
+<form id="shiftForm">
+  <div class="field">
+    <label>Dato</label>
+    <input type="date" id="date" required>
   </div>
-</section>
 
-<section id="services">
-  <h2 class="section-title">2. Hvad skal vi lave?</h2>
-  <p class="section-description">Du kan vælge lige så mange services, du vil.</p>
-  <div class="services" id="serviceList"></div>
-</section>
-
-<section>
-  <h2 class="section-title">3. Book klargøring</h2>
-  <div class="checkout">
-    <div class="form">
-      <input id="name" type="text" placeholder="Dit navn">
-
-      <div class="phone-row">
-        <select id="countryCode">
-          <option value="+45">🇩🇰 +45 Danmark</option>
-          <option value="+46">🇸🇪 +46 Sverige</option>
-          <option value="+47">🇳🇴 +47 Norge</option>
-          <option value="+49">🇩🇪 +49 Tyskland</option>
-          <option value="+31">🇳🇱 +31 Holland</option>
-          <option value="+44">🇬🇧 +44 Storbritannien</option>
-          <option value="+1">🇺🇸 +1 USA/Canada</option>
-          <option value="+33">🇫🇷 +33 Frankrig</option>
-          <option value="+34">🇪🇸 +34 Spanien</option>
-        </select>
-        <input id="phone" type="tel" placeholder="Telefonnummer">
-      </div>
-
-      <input id="bikeModel" type="text" placeholder="Model – fx Talaria XXX">
-      <textarea id="message" placeholder="Ekstra besked"></textarea>
+  <div class="two">
+    <div class="field">
+      <label>Starttid</label>
+      <input type="time" id="start" value="15:00" required>
     </div>
-
-    <div class="summary">
-      <h3>Din bestilling</h3>
-      <div id="summaryItems"><p style="color:#66717f;">Vælg din bike og dine services.</p></div>
-      <div class="total"><span>Total</span><span id="totalPrice">0 kr.</span></div>
-      <button class="book-btn" id="bookButton" onclick="book()">Send booking</button>
-      <p class="notice">Dette er en bookingforespørgsel. Tiden er først endeligt aftalt, når vi har svaret dig.</p>
+    <div class="field">
+      <label>Sluttid</label>
+      <input type="time" id="end" value="20:00" required>
     </div>
   </div>
+
+  <div class="two">
+    <div class="field">
+      <label>Pause (minutter)</label>
+      <input type="number" id="break" value="0" min="0">
+    </div>
+    <div class="field">
+      <label>Løn pr. time</label>
+      <input type="number" id="rate" value="60" min="0">
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Note</label>
+    <input type="text" id="note" placeholder="Fx aftenvagt...">
+  </div>
+
+  <button class="primary" type="submit" id="saveBtn">
+    Gem arbejdstimer →
+  </button>
+  <button class="secondary" type="button" id="cancel" style="display:none;width:100%;margin-top:8px">
+    Annuller
+  </button>
+</form>
+<p class="hint">Dine vagter gemmes automatisk i browseren.</p>
 </section>
 
-<section class="about" id="omos">
-  <h2 class="section-title">Om os</h2>
-  <p>Vi er to venner med interesse for cykler, Talaria og Surron. Vi tilbyder klargøring og almindelig vedligeholdelse til fair priser, så din bike kan stå clean og klar til næste tur.</p>
+<section class="panel">
+<h2>🎯 Dit lønmål</h2>
+<div class="field">
+<label>Dit mål i kroner</label>
+<input type="number" id="goal" value="5000" min="0">
+</div>
+<div id="goalText">0 / 5.000 kr.</div>
+<div class="progress"><span id="goalBar" style="width:0%"></span></div>
+<small id="goalHint"></small>
 </section>
 
-<footer>© 2026 BikeCare · Cykel · Talaria · Surron</footer>
+<section class="panel">
+<h2>⚙️ Standardtimeløn</h2>
+<div class="field">
+<label>Standardløn (kr.)</label>
+<input type="number" id="defaultRate" value="60" min="0">
+</div>
+<button class="secondary" id="saveRate">Gem standardløn</button>
+</section>
+
+</div>
+
+<div>
+<section class="panel">
+<h2>📋 Mine vagter</h2>
+<div class="actions">
+<select id="filter" style="width:auto">
+<option value="all">Alle vagter</option>
+<option value="month">Denne måned</option>
+<option value="year">Dette år</option>
+</select>
+<button class="secondary" id="export">↓ Eksportér CSV</button>
+<button class="danger" id="clear">Slet alle</button>
+</div>
+
+<div class="tablewrap">
+<table>
+<thead>
+<tr>
+<th>Dato</th>
+<th>Tid</th>
+<th>Timer</th>
+<th>Løn</th>
+<th>Handling</th>
+</tr>
+</thead>
+<tbody id="rows"></tbody>
+</table>
+<div class="empty" id="empty">Ingen vagter endnu. Tilføj din første vagt!</div>
+</div>
+</section>
+
+<div class="bottom">
+<section class="panel">
+<h2>📅 Denne måned</h2>
+<small>Timer arbejdet</small>
+<div class="value" id="monthHoursBig">0 t</div>
+<small>Løn optjent</small>
+<div class="value green" id="monthPayBig">0 kr.</div>
+</section>
+<section class="panel">
+<h2>📈 Overblik</h2>
+<small>Bedste vagt</small>
+<div class="value" id="best">0 kr.</div>
+<small>Antal vagter</small>
+<div class="value" id="allShifts">0</div>
+</section>
+</div>
+</div>
+</div>
+
+<p class="hint" style="text-align:center;margin-top:30px">
+TimeTrack · Din personlige løntracker
+</p>
+</div>
 
 <script>
-const WORKER_URL="https://bikecare-booking.victorgryner.workers.dev";
+const $ = id => document.getElementById(id);
 
-const services=[
-{id:"wash",name:"🧼 Grundig vask",description:"Grundig udvendig vask af stel, hjul og svært tilgængelige områder.",cykel:99,talaria:149,surron:149},
-{id:"premium",name:"✨ Premium klargøring",description:"Grundig vask, rengøring af fælge og kædeområde samt flot finish.",cykel:199,talaria:299,surron:299},
-{id:"tires",name:"🛞 Dæktryk + sikkerhedstjek",description:"Vi kontrollerer dæktryk, dæk, bremser og tydelige løse dele.",cykel:49,talaria:69,surron:69},
-{id:"brakes",name:"🔧 Bremsejustering",description:"Kontrol og justering af bremser samt kontrol af synligt slid på klodser.",cykel:79,talaria:99,surron:99},
-{id:"chain",name:"⛓️ Kæderens + smøring",description:"Kæden renses for snavs og gammel smøring og smøres efterfølgende.",cykel:79,talaria:119,surron:119},
-{id:"bolts",name:"🔩 Efterspænding",description:"Kontrol af relevante bolte og fastgørelser samt efterspænding.",cykel:79,talaria:99,surron:99},
-{id:"wheels",name:"🧽 Fælge + drivetrain-rens",description:"Ekstra grundig rengøring omkring fælge, kæde og drivetrain.",cykel:99,talaria:149,surron:149},
-{id:"full",name:"⭐ Fuld klargøring",description:"Vask, kæderens, smøring, dæktryk, bremsetjek, efterspænding og finish.",cykel:299,talaria:449,surron:449}
-];
+let shifts = JSON.parse(localStorage.getItem("timetrack") || "[]");
+let editing = null;
 
-let selectedVehicle=null;
-let selectedServices=[];
+const money = n => new Intl.NumberFormat("da-DK",{
+  style:"currency",currency:"DKK",maximumFractionDigits:2
+}).format(n);
 
-function selectVehicle(vehicle,element){
-  selectedVehicle=vehicle;
-  document.querySelectorAll(".vehicle").forEach(v=>v.classList.remove("selected"));
-  element.classList.add("selected");
-  selectedServices=[];
-  renderServices();
-  updateSummary();
+const number = n => new Intl.NumberFormat("da-DK",{
+  maximumFractionDigits:2
+}).format(n);
+
+function hours(s){
+  let duration = s.end-s.start;
+  if(duration<=0) duration+=1440;
+  return Math.max(0,(duration-s.pause)/60);
 }
 
-function renderServices(){
-  const container=document.getElementById("serviceList");
-  container.innerHTML="";
-  if(!selectedVehicle){
-    container.innerHTML='<p style="color:#66717f;">Vælg først hvilken bike du har 👆</p>';
+function pay(s){return hours(s)*s.rate}
+
+function clock(m){
+  return String(Math.floor(m/60)%24).padStart(2,"0")+":"+
+  String(m%60).padStart(2,"0");
+}
+
+function getDate(s){
+  return new Date(s.date+"T12:00:00");
+}
+
+function sameMonth(s,d){
+  let x=getDate(s);
+  return x.getMonth()===d.getMonth() &&
+         x.getFullYear()===d.getFullYear();
+}
+
+function monday(d){
+  let x=new Date(d);
+  x.setHours(0,0,0,0);
+  x.setDate(x.getDate()-(x.getDay()+6)%7);
+  return x;
+}
+
+function sameWeek(s,d){
+  let x=getDate(s),m=monday(d);
+  return x>=m && x<new Date(m.getTime()+7*86400000);
+}
+
+function save(){
+  localStorage.setItem("timetrack",JSON.stringify(shifts));
+  render();
+}
+
+function render(){
+  let now=new Date();
+  let totalH=shifts.reduce((a,s)=>a+hours(s),0);
+  let totalP=shifts.reduce((a,s)=>a+pay(s),0);
+
+  let month=shifts.filter(s=>sameMonth(s,now));
+  let week=shifts.filter(s=>sameWeek(s,now));
+
+  let mh=month.reduce((a,s)=>a+hours(s),0);
+  let mp=month.reduce((a,s)=>a+pay(s),0);
+  let wh=week.reduce((a,s)=>a+hours(s),0);
+  let wp=week.reduce((a,s)=>a+pay(s),0);
+
+  $("totalPay").textContent=money(totalP);
+  $("totalHours").textContent=number(totalH)+" timer";
+  $("monthPay").textContent=money(mp);
+  $("monthHours").textContent=number(mh)+" timer";
+  $("weekPay").textContent=money(wp);
+  $("weekHours").textContent=number(wh)+" timer";
+  $("average").textContent=money(shifts.length?totalP/shifts.length:0);
+  $("shiftCount").textContent=shifts.length+" vagter";
+
+  $("monthHoursBig").textContent=number(mh)+" t";
+  $("monthPayBig").textContent=money(mp);
+  $("allShifts").textContent=shifts.length;
+  $("best").textContent=money(shifts.length?Math.max(...shifts.map(pay)):0);
+
+  let goal=Number($("goal").value)||0;
+  let percent=goal?Math.min(100,totalP/goal*100):0;
+  $("goalText").textContent=number(totalP)+" / "+number(goal)+" kr.";
+  $("goalBar").style.width=percent+"%";
+  $("goalHint").textContent=goal?
+    (totalP>=goal?"Mål nået! 🎉":number(goal-totalP)+" kr. tilbage"):
+    "Indtast et mål.";
+
+  let filter=$("filter").value;
+  let shown=shifts.filter(s=>{
+    if(filter==="month")return sameMonth(s,now);
+    if(filter==="year")return getDate(s).getFullYear()===now.getFullYear();
+    return true;
+  }).sort((a,b)=>b.date.localeCompare(a.date));
+
+  $("rows").innerHTML=shown.map(s=>`
+    <tr>
+      <td>${getDate(s).toLocaleDateString("da-DK")}</td>
+      <td>${clock(s.start)}–${clock(s.end)}</td>
+      <td>${number(hours(s))} t</td>
+      <td class="money">${money(pay(s))}</td>
+      <td>
+        <button class="tiny" onclick="editShift('${s.id}')">Redigér</button>
+        <button class="tiny" onclick="deleteShift('${s.id}')">✕</button>
+      </td>
+    </tr>
+  `).join("");
+
+  $("empty").style.display=shown.length?"none":"block";
+}
+
+function resetForm(){
+  editing=null;
+  $("shiftForm").reset();
+  $("date").value=new Date().toISOString().slice(0,10);
+  $("rate").value=localStorage.getItem("defaultRate")||60;
+  $("start").value="15:00";
+  $("end").value="20:00";
+  $("break").value=0;
+  $("formTitle").textContent="＋ Tilføj arbejdstimer";
+  $("saveBtn").textContent="Gem arbejdstimer →";
+  $("cancel").style.display="none";
+}
+
+$("shiftForm").addEventListener("submit",e=>{
+  e.preventDefault();
+
+  let [sh,sm]=$("start").value.split(":").map(Number);
+  let [eh,em]=$("end").value.split(":").map(Number);
+
+  let s={
+    id:editing||String(Date.now()),
+    date:$("date").value,
+    start:sh*60+sm,
+    end:eh*60+em,
+    pause:Number($("break").value)||0,
+    rate:Number($("rate").value),
+    note:$("note").value
+  };
+
+  let duration=s.end-s.start;
+  if(duration<=0)duration+=1440;
+
+  if(!s.date||s.pause<0||s.pause>=duration||s.rate<0){
+    alert("Tjek dine tider, pause og løn.");
     return;
   }
 
-  services.forEach(service=>{
-    const card=document.createElement("div");
-    card.className="service";
-    card.onclick=()=>toggleService(service.id,card);
-    card.innerHTML=`<div class="check"></div><div class="service-info"><div class="service-top"><h3>${service.name}</h3><div class="price">${service[selectedVehicle]} kr.</div></div><p>${service.description}</p></div>`;
-    container.appendChild(card);
-  });
-}
-
-function toggleService(id,card){
-  if(selectedServices.includes(id)){
-    selectedServices=selectedServices.filter(x=>x!==id);
-    card.classList.remove("selected");
+  if(editing){
+    shifts=shifts.map(x=>x.id===editing?s:x);
   }else{
-    selectedServices.push(id);
-    card.classList.add("selected");
-  }
-  updateSummary();
-}
-
-function updateSummary(){
-  const summary=document.getElementById("summaryItems");
-  const totalElement=document.getElementById("totalPrice");
-
-  if(!selectedVehicle||selectedServices.length===0){
-    summary.innerHTML='<p style="color:#66717f;">Vælg din bike og dine services.</p>';
-    totalElement.innerText="0 kr.";
-    return;
+    shifts.push(s);
   }
 
-  let total=0;
-  let html="";
-  selectedServices.forEach(id=>{
-    const service=services.find(s=>s.id===id);
-    const price=service[selectedVehicle];
-    total+=price;
-    html+=`<div class="summary-row"><span>${service.name}</span><span>${price} kr.</span></div>`;
-  });
+  save();
+  resetForm();
+});
 
-  summary.innerHTML=html;
-  totalElement.innerText=total+" kr.";
-}
+window.editShift=id=>{
+  let s=shifts.find(x=>x.id===id);
+  if(!s)return;
 
-async function book(){
-  const name=document.getElementById("name").value.trim();
-  const countryCode=document.getElementById("countryCode").value;
-  const phoneRaw=document.getElementById("phone").value.trim();
-  const phone=`${countryCode} ${phoneRaw}`;
-  const model=document.getElementById("bikeModel").value.trim();
-  const message=document.getElementById("message").value.trim();
-  const button=document.getElementById("bookButton");
+  editing=id;
+  $("date").value=s.date;
+  $("start").value=clock(s.start);
+  $("end").value=clock(s.end);
+  $("break").value=s.pause;
+  $("rate").value=s.rate;
+  $("note").value=s.note||"";
+  $("formTitle").textContent="✎ Redigér vagt";
+  $("saveBtn").textContent="Gem ændringer →";
+  $("cancel").style.display="block";
+  window.scrollTo({top:0,behavior:"smooth"});
+};
 
-  if(!selectedVehicle){alert("Vælg først din bike.");return;}
-  if(selectedServices.length===0){alert("Vælg mindst én service.");return;}
-  if(!name||!phoneRaw){alert("Skriv navn og telefonnummer.");return;}
-
-  let total=0;
-  const selected=selectedServices.map(id=>{
-    const service=services.find(s=>s.id===id);
-    const price=service[selectedVehicle];
-    total+=price;
-    return{name:service.name,price};
-  });
-
-  button.disabled=true;
-  button.innerText="Sender...";
-
-  try{
-    const response=await fetch(WORKER_URL,{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        name,
-        phone,
-        countryCode,
-        vehicle:selectedVehicle,
-        model:model||"Ikke angivet",
-        services:selected,
-        total,
-        message:message||"Ingen besked"
-      })
-    });
-
-    const responseText=await response.text();
-    if(!response.ok){alert("Serverfejl: "+responseText);return;}
-
-    alert(`Booking sendt ✅\n\nTotal: ${total} kr.`);
-    document.getElementById("name").value="";
-    document.getElementById("phone").value="";
-    document.getElementById("bikeModel").value="";
-    document.getElementById("message").value="";
-  }catch(error){
-    console.error(error);
-    alert("Kunne ikke kontakte booking-serveren.");
-  }finally{
-    button.disabled=false;
-    button.innerText="Send booking";
+window.deleteShift=id=>{
+  if(confirm("Vil du slette denne vagt?")){
+    shifts=shifts.filter(s=>s.id!==id);
+    save();
+    if(editing===id)resetForm();
   }
-}
+};
 
-renderServices();
+$("cancel").onclick=resetForm;
+$("filter").onchange=render;
+
+$("saveRate").onclick=()=>{
+  let r=Number($("defaultRate").value);
+  if(r<0){alert("Ugyldig løn");return}
+  localStorage.setItem("defaultRate",r);
+  $("rate").value=r;
+  alert("Standardløn gemt!");
+};
+
+$("goal").oninput=render;
+
+$("export").onclick=()=>{
+  if(!shifts.length){alert("Ingen vagter at eksportere");return}
+
+  let rows=[
+    ["Dato","Start","Slut","Pause","Timer","Timeløn","Løn","Note"],
+    ...shifts.map(s=>[
+      s.date,clock(s.start),clock(s.end),s.pause,
+      hours(s).toFixed(2),s.rate,pay(s).toFixed(2),s.note||""
+    ])
+  ];
+
+  let csv="\ufeff"+rows.map(r=>
+    r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(";")
+  ).join("\n");
+
+  let a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([csv],{
+    type:"text/csv;charset=utf-8"
+  }));
+  a.download="mine-arbejdstimer.csv";
+  a.click();
+  URL.revokeObjectURL(a.href);
+};
+
+$("clear").onclick=()=>{
+  if(confirm("Er du sikker på at slette ALLE vagter?")){
+    shifts=[];
+    save();
+    resetForm();
+  }
+};
+
+$("date").value=new Date().toISOString().slice(0,10);
+$("rate").value=localStorage.getItem("defaultRate")||60;
+$("defaultRate").value=localStorage.getItem("defaultRate")||60;
+
+render();
 </script>
 </body>
 </html>
